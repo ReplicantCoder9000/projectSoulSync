@@ -8,7 +8,8 @@ import {
   Link,
   Alert,
   styled,
-  keyframes
+  keyframes,
+  useTheme
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -61,7 +62,9 @@ const RetroBackground = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  background: theme.gradients.auth,
+  background: theme.palette.mode === 'dark' 
+    ? 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)'
+    : 'linear-gradient(135deg, #F8F8FF 0%, #E6E6FA 100%)',
   overflow: 'hidden',
   animation: `${bootAnimation} 1s ease-out`,
   '&::before': {
@@ -95,9 +98,9 @@ const RetroTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     fontFamily: '"VT323", monospace',
     fontSize: '20px',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
     border: '2px solid',
-    borderColor: theme.palette.mode === 'light' ? '#C0C0C0' : '#4A4A4A',
+    borderColor: theme.palette.mode === 'dark' ? '#4A4A4A' : '#C0C0C0',
     boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)',
     transition: 'all 0.2s ease-in-out',
     '& fieldset': {
@@ -132,7 +135,7 @@ const RetroAlert = styled(Alert)(({ theme }) => ({
   fontSize: '18px',
   border: '2px solid',
   borderColor: theme.palette.error.main,
-  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
   boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)',
   '& .MuiAlert-icon': {
     color: theme.palette.error.main
@@ -145,6 +148,7 @@ const Login = () => {
   const location = useLocation();
   const { login, loading, error, clearError } = useAuth();
   const [showAlert, setShowAlert] = useState(false);
+  const theme = useTheme();
 
   const from = location.state?.from?.pathname || '/dashboard';
 
@@ -277,12 +281,16 @@ const Login = () => {
                   mb: 2,
                   fontFamily: '"Press Start 2P", monospace',
                   fontSize: '14px',
-                  background: (theme) => theme.gradients.neon,
+                  background: theme.palette.mode === 'dark'
+                    ? 'linear-gradient(45deg, #FF1493 30%, #FF69B4 90%)'
+                    : 'linear-gradient(45deg, #FF69B4 30%, #FFB6C1 90%)',
                   border: '2px solid',
                   borderColor: 'primary.main',
                   boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)',
                   '&:hover': {
-                    background: (theme) => theme.gradients.electric,
+                    background: theme.palette.mode === 'dark'
+                      ? 'linear-gradient(45deg, #FF69B4 30%, #FFB6C1 90%)'
+                      : 'linear-gradient(45deg, #FF1493 30%, #FF69B4 90%)',
                     transform: 'translateY(-2px)',
                     boxShadow: '4px 4px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)'
                   }
