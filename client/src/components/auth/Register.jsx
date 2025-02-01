@@ -54,12 +54,19 @@ const Register = () => {
       confirmPassword: ''
     },
     validationSchema,
-    onSubmit: async (values) => {
-      const success = await register(values);
-      if (success) {
-        navigate('/dashboard');
-      } else {
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        const success = await register(values);
+        if (success) {
+          navigate('/dashboard');
+        } else {
+          setShowAlert(true);
+        }
+      } catch (err) {
         setShowAlert(true);
+        console.error('Registration error:', err);
+      } finally {
+        setSubmitting(false);
       }
     }
   });
@@ -226,7 +233,7 @@ const Register = () => {
                 variant="contained"
                 size="small"
                 sx={commonButtonStyles.button}
-                disabled={loading}
+                disabled={loading || formik.isSubmitting}
               >
                 {loading ? 'Creating...' : 'Create Account'}
               </ActionButton>
