@@ -1,12 +1,14 @@
 import { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAuth as useReduxAuth } from '../../hooks/useAuth';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProfile } from '../../store/slices/authSlice.js';
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const auth = useReduxAuth();
-  const { isAuthenticated, getProfile } = auth;
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const { isAuthenticated } = auth;
   const [profileChecked, setProfileChecked] = useState(false);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     const checkProfile = async () => {
       if (isAuthenticated && !profileChecked) {
         try {
-          await getProfile();
+          await dispatch(getProfile()).unwrap();
           if (mounted) {
             setProfileChecked(true);
           }
@@ -30,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       mounted = false;
     };
-  }, [isAuthenticated, getProfile, profileChecked]);
+  }, [isAuthenticated, profileChecked, dispatch]);
 
   return (
     <AuthContext.Provider value={{ ...auth, profileChecked }}>
