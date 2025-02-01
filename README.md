@@ -42,7 +42,7 @@ SoulSync is a modern mood journaling application that helps you track, understan
 
 1. Clone the repository
 ```bash
-git clone https://github.com/Mykull06/projectSoulSync.git
+git clone https://github.com/ReplicantCoder9000/projectSoulSync.git
 cd projectSoulSync
 ```
 
