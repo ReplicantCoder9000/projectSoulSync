@@ -40,7 +40,7 @@ const WindowContainer = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: theme.gradients.crt,
+    background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px)',
     opacity: 0.1,
     pointerEvents: 'none'
   },
@@ -64,7 +64,9 @@ const TitleBar = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'space-between',
   padding: theme.spacing(0.5, 1),
-  background: theme.gradients.metallic,
+  background: theme.palette.mode === 'dark'
+    ? 'linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%)'
+    : 'linear-gradient(180deg, #E8E8E8 0%, #B0B0B0 50%, #E8E8E8 100%)',
   borderBottom: '2px solid',
   borderColor: theme.palette.mode === 'light' ? '#C0C0C0' : '#4A4A4A',
   position: 'relative',
