@@ -2,8 +2,6 @@ import { Box, Grid, Stack } from '@mui/material';
 import { useAuth } from '../hooks/useAuth';
 import { useEntries } from '../hooks/useEntries';
 import { useState, useEffect } from 'react';
-import NewEntryButton from '../components/entries/NewEntryButton';
-import EntryForm from '../components/entries/EntryForm';
 import MoodStats from '../components/stats/MoodStats';
 import CardContainer from '../components/ui/CardContainer';
 import SectionHeader from '../components/ui/SectionHeader';
@@ -13,7 +11,6 @@ const Dashboard = () => {
   const { user } = useAuth();
   const { entries, getEntries } = useEntries();
   const [recentEntries, setRecentEntries] = useState([]);
-  const [isEntryFormOpen, setIsEntryFormOpen] = useState(false);
 
   // Fetch entries initially and set up polling
   useEffect(() => {
@@ -156,16 +153,6 @@ const Dashboard = () => {
         </Grid>
       </Grid>
 
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 24,
-          right: 24
-        }}
-      >
-        <NewEntryButton onClick={() => setIsEntryFormOpen(true)} />
-      </Box>
-      <EntryForm open={isEntryFormOpen} onClose={() => setIsEntryFormOpen(false)} />
     </Box>
   );
 };

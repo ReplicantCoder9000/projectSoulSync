@@ -31,7 +31,7 @@ const moods = [
   'peaceful'
 ];
 
-const EntryForm = ({ open, onClose }) => {
+const EntryForm = ({ open, onClose, isPage = false }) => {
   const { createEntry } = useEntries();
 
   const formik = useFormik({
@@ -66,30 +66,7 @@ const EntryForm = ({ open, onClose }) => {
   };
 
 
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="sm"
-      fullWidth
-      PaperProps={{
-        sx: {
-          borderRadius: 2,
-          bgcolor: 'background.paper'
-        }
-      }}
-    >
-      <DialogTitle
-        sx={{
-          fontSize: '1.25rem',
-          fontWeight: 600,
-          color: 'text.primary',
-          pb: 1
-        }}
-      >
-        New Journal Entry
-      </DialogTitle>
-      <DialogContent>
+  const formContent = (
         <Stack spacing={3} sx={{ mt: 1 }}>
           <Box>
             <Box sx={{ mb: 1, color: 'text.secondary', fontSize: '0.875rem' }}>
@@ -152,6 +129,37 @@ const EntryForm = ({ open, onClose }) => {
             }
           />
         </Stack>
+  );
+
+  if (isPage) {
+    return formContent;
+  }
+
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: 2,
+          bgcolor: 'background.paper'
+        }
+      }}
+    >
+      <DialogTitle
+        sx={{
+          fontSize: '1.25rem',
+          fontWeight: 600,
+          color: 'text.primary',
+          pb: 1
+        }}
+      >
+        New Journal Entry
+      </DialogTitle>
+      <DialogContent>
+        {formContent}
       </DialogContent>
       <DialogActions sx={{ px: 3, py: 2 }}>
         <ActionButton
@@ -175,8 +183,9 @@ const EntryForm = ({ open, onClose }) => {
 };
 
 EntryForm.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+  isPage: PropTypes.bool
 };
 
 export default EntryForm;

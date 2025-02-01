@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { gradients } from '../../styles/theme.js';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Container,
@@ -68,22 +69,51 @@ const Register = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          py: 4
+          alignItems: 'center',
+          background: gradients.auth,
+          px: 3,
+          mx: -3
         }}
       >
         <Paper
           elevation={3}
           sx={{
-            p: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
+          p: { xs: 3, sm: 4 },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          background: 'background.paper',
+          backdropFilter: 'blur(8px)',
+          borderRadius: 3,
+          boxShadow: (theme) => theme.shadows.strong,
+          border: '1px solid',
+          borderColor: 'divider',
+          width: '100%',
+          maxWidth: 'sm'
           }}
         >
-          <Typography component="h1" variant="h4" gutterBottom>
+          <Typography
+            component="h1"
+            variant="h4"
+            gutterBottom
+            sx={{
+              fontWeight: 700,
+              color: 'text.primary',
+              textAlign: 'center',
+              mb: 0.5
+            }}
+          >
             Create Account
           </Typography>
-          <Typography color="text.secondary" gutterBottom>
+          <Typography
+            color="text.secondary"
+            gutterBottom
+            sx={{
+              textAlign: 'center',
+              mb: 4,
+              fontSize: '1rem'
+            }}
+          >
             Sign up to start journaling
           </Typography>
 
@@ -91,7 +121,13 @@ const Register = () => {
             <Box
               component="form"
               onSubmit={formik.handleSubmit}
-              sx={{ width: '100%', mt: 2 }}
+              sx={{
+                width: '100%',
+                mt: 2,
+                '& .MuiTextField-root': {
+                  mb: 2.5
+                }
+              }}
             >
               {showAlert && error && (
                 <Alert severity="error" onClose={handleAlertClose} sx={{ mb: 2 }}>
@@ -173,7 +209,7 @@ const Register = () => {
                 Sign Up
               </Button>
 
-              <Box sx={{ textAlign: 'center' }}>
+              <Box sx={{ textAlign: 'center', mt: 3 }}>
                 <Typography variant="body2" color="text.secondary">
                   Already have an account?{' '}
                   <Link component={RouterLink} to="/login">

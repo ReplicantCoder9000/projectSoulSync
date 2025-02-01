@@ -10,11 +10,12 @@ export const spacing = {
   xxl: '3rem'      // 48px
 };
 
-// Custom shadows
+// Custom shadows with refined values for better depth perception
 export const shadows = {
-  soft: '0 1px 4px rgba(0, 0, 0, 0.05)',
-  medium: '0 2px 8px rgba(0, 0, 0, 0.08)',
-  strong: '0 4px 16px rgba(0, 0, 0, 0.12)'
+  soft: '0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.04)',
+  medium: '0 4px 8px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04)',
+  strong: '0 8px 16px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06)',
+  focus: '0 0 0 2px rgba(85, 107, 47, 0.2)'  // Primary color with opacity for focus states
 };
 
 // Breakpoints for responsive design
@@ -24,6 +25,13 @@ export const breakpoints = {
   md: 960,
   lg: 1280,
   xl: 1920
+};
+
+// Custom gradients
+export const gradients = {
+  auth: 'linear-gradient(135deg, #8B9E72 0%, #D4C5B9 100%)',  // Sage to beige
+  primary: 'linear-gradient(135deg, #556B2F 0%, #8B9E72 100%)',  // Deep sage to light sage
+  secondary: 'linear-gradient(135deg, #D4C5B9 0%, #E8E0D9 100%)'  // Warm beige to light beige
 };
 
 const getTheme = (mode = 'light') => createTheme({
@@ -158,7 +166,11 @@ const getTheme = (mode = 'light') => createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-          boxShadow: shadows.soft
+          boxShadow: shadows.soft,
+          transition: 'box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out',
+          '&:hover': {
+            boxShadow: shadows.medium
+          }
         }
       },
       defaultProps: {
@@ -192,8 +204,15 @@ const getTheme = (mode = 'light') => createTheme({
         root: {
           '& .MuiOutlinedInput-root': {
             borderRadius: 8,
+            transition: 'border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
             '& fieldset': {
               borderWidth: 1.5
+            },
+            '&:hover fieldset': {
+              borderColor: 'primary.main'
+            },
+            '&.Mui-focused': {
+              boxShadow: shadows.focus
             }
           }
         }

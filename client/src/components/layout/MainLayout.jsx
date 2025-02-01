@@ -54,10 +54,11 @@ const MainLayout = () => {
   };
 
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'Journal Entries', icon: <JournalIcon />, path: '/entries' },
-    { text: 'Mood Stats', icon: <StatsIcon />, path: '/stats' },
-    { text: 'Settings', icon: <SettingsIcon />, path: '/settings' }
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+  { text: 'New Entry', icon: <JournalIcon />, path: '/new-entry' },
+  { text: 'Journal Entries', icon: <JournalIcon />, path: '/entries' },
+  { text: 'Mood Stats', icon: <StatsIcon />, path: '/stats' },
+  { text: 'Settings', icon: <SettingsIcon />, path: '/settings' }
   ];
 
   const drawer = (

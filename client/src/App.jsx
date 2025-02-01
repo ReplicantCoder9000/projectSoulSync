@@ -16,6 +16,7 @@ import Register from './components/auth/Register.jsx';
 
 // Protected Pages
 import Dashboard from './pages/Dashboard';
+import NewEntry from './pages/NewEntry';
 const Entries = () => <div>Entries</div>;
 const Stats = () => <div>Stats</div>;
 import Settings from './pages/Settings';
@@ -44,6 +45,7 @@ const App = () => {
             >
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
+              <Route path="new-entry" element={<NewEntry />} />
               <Route path="entries" element={<Entries />} />
               <Route path="stats" element={<Stats />} />
               <Route path="settings" element={<Settings />} />
