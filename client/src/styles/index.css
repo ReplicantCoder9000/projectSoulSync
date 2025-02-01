@@ -28,10 +28,8 @@ body {
   --spacing-xxl: 3rem;
 
   /* Typography */
-  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  --font-secondary: 'Merriweather', Georgia, 'Times New Roman', Times, serif;
+  --font-primary: '"Press Start 2P", "VT323", monospace';
+  --font-secondary: '"Orbitron", monospace';
   
   /* Transitions */
   --transition-short: 200ms;
@@ -40,7 +38,7 @@ body {
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: var(--font-secondary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
@@ -254,9 +252,4 @@ p, li {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 4px;
-}
-
-/* Selection styles */
-::selection {
-  background-color: rgba(74, 103, 65, 0.2); /* Primary color with opacity */
 }
