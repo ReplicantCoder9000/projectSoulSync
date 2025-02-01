@@ -5,8 +5,45 @@
     <link rel="icon" type="image/svg+xml" href="/mood.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Track and manage your daily moods and thoughts with our intuitive journal app" />
-    <meta name="theme-color" content="#2196f3" />
-    <title>Mood Journal</title>
+    <meta name="theme-color" content="#4B0082" />
+    <title>SoulSync - Y2K Mood Journal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        background-color: #F8F8FF;
+        background-image: 
+          linear-gradient(135deg, #F8F8FF 0%, #E6E6FA 100%),
+          repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
+        background-blend-mode: overlay;
+      }
+      #root {
+        min-height: 100vh;
+      }
+      /* Retro scrollbar styles */
+      ::-webkit-scrollbar {
+        width: 16px;
+        height: 16px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #E0E0E0;
+        border: 1px solid #A0A0A0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #C0C0C0;
+        border: 1px solid #808080;
+        box-shadow: inset 1px 1px 0 rgba(255,255,255,0.9),
+                   inset -1px -1px 0 rgba(0,0,0,0.2);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #B0B0B0;
+      }
+      ::-webkit-scrollbar-corner {
+        background: #E0E0E0;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

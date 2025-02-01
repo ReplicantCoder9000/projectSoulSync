@@ -10,12 +10,14 @@ export const spacing = {
   xxl: '3rem'      // 48px
 };
 
-// Custom shadows with refined values for better depth perception
+// Custom shadows with retro beveled effects
 export const shadows = {
-  soft: '0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.04)',
-  medium: '0 4px 8px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04)',
-  strong: '0 8px 16px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06)',
-  focus: '0 0 0 2px rgba(85, 107, 47, 0.2)'  // Primary color with opacity for focus states
+  soft: '2px 2px 0 rgba(0, 0, 0, 0.1), -1px -1px 0 rgba(255, 255, 255, 0.8)',
+  medium: '3px 3px 0 rgba(0, 0, 0, 0.15), -1px -1px 0 rgba(255, 255, 255, 0.9)',
+  strong: '4px 4px 0 rgba(0, 0, 0, 0.2), -2px -2px 0 rgba(255, 255, 255, 1)',
+  focus: '0 0 0 2px rgba(75, 0, 130, 0.2)',  // Electric indigo with opacity
+  window: '2px 2px 4px rgba(0, 0, 0, 0.2), -1px -1px 2px rgba(255, 255, 255, 0.8)',
+  retro: '2px 2px 0 rgba(0, 0, 0, 0.2), -2px -2px 0 rgba(255, 255, 255, 0.5)'
 };
 
 // Breakpoints for responsive design
@@ -27,34 +29,56 @@ export const breakpoints = {
   xl: 1920
 };
 
-// Custom gradients
+// Y2K-inspired gradients and effects
 export const gradients = {
-  auth: 'linear-gradient(135deg, #8B9E72 0%, #D4C5B9 100%)',  // Sage to beige
-  primary: 'linear-gradient(135deg, #556B2F 0%, #8B9E72 100%)',  // Deep sage to light sage
-  secondary: 'linear-gradient(135deg, #D4C5B9 0%, #E8E0D9 100%)'  // Warm beige to light beige
+  auth: 'linear-gradient(135deg, #4B0082 0%, #FF69B4 100%)',  // Electric indigo to hot pink
+  primary: 'linear-gradient(135deg, #9370DB 0%, #4B0082 100%)',  // Medium purple to electric indigo
+  secondary: 'linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%)',  // Light pink to hot pink
+  window: 'linear-gradient(180deg, #C0C0C0 0%, #FFFFFF 100%)',  // Classic window gradient
+  background: 'linear-gradient(135deg, #F8F8FF 0%, #E6E6FA 100%)',  // Ghost white to lavender
+  metallic: 'linear-gradient(180deg, #E8E8E8 0%, #B0B0B0 50%, #E8E8E8 100%)',  // Metallic effect
+  crt: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px)',  // CRT scanline effect
+  neon: 'linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FF1493 100%)',  // Neon pink
+  electric: 'linear-gradient(135deg, #00FFFF 0%, #4169E1 50%, #00FFFF 100%)'  // Electric blue
+};
+
+// Y2K animation keyframes
+export const keyframes = {
+  blink: {
+    '0%, 100%': { opacity: 1 },
+    '50%': { opacity: 0 }
+  },
+  scanline: {
+    '0%': { transform: 'translateY(-100%)' },
+    '100%': { transform: 'translateY(100%)' }
+  },
+  static: {
+    '0%, 100%': { opacity: 0.3 },
+    '50%': { opacity: 0.1 }
+  }
 };
 
 const getTheme = (mode = 'light') => createTheme({
   palette: {
     mode,
     primary: {
-      main: '#556B2F',     // Muted olive green
-      light: '#8B9E72',    // Light sage
-      dark: '#3B4A1F'      // Deep forest
+      main: '#FF1493',     // Deep pink
+      light: '#FF69B4',    // Hot pink
+      dark: '#C71585'      // Medium violet red
     },
     secondary: {
-      main: '#D4C5B9',     // Warm beige
-      light: '#E8E0D9',    // Light beige
-      dark: '#A69B91'      // Taupe
+      main: '#4169E1',     // Royal blue
+      light: '#00FFFF',    // Cyan
+      dark: '#0000CD'      // Medium blue
     },
     background: {
-      default: mode === 'light' ? '#FAFAF8' : '#1A1A1A',  // Off-white / Dark gray
-      paper: mode === 'light' ? '#FFFFFF' : '#2D2D2D',    // White / Darker gray
-      accent: mode === 'light' ? '#F4F6F0' : '#2A2A2A'    // Light sage / Dark accent
+      default: mode === 'light' ? '#F0F0FF' : '#000033',  // Light blue-tinted / Deep blue-black
+      paper: mode === 'light' ? '#FFFFFF' : '#000066',    // White / Navy blue
+      accent: mode === 'light' ? '#E6E6FA' : '#191970'    // Lavender / Midnight blue
     },
     text: {
-      primary: mode === 'light' ? '#2C2C2C' : '#FFFFFF',
-      secondary: mode === 'light' ? '#666666' : '#A0A0A0'
+      primary: mode === 'light' ? '#000080' : '#00FFFF',      // Navy / Cyan
+      secondary: mode === 'light' ? '#4B0082' : '#FF69B4'     // Indigo / Hot pink
     },
     mood: {
       happy: '#E6C74C',    // Muted gold
@@ -65,21 +89,25 @@ const getTheme = (mode = 'light') => createTheme({
       excited: '#E6A94C',  // Muted orange
       peaceful: '#8FB48E'  // Sage green
     },
-    divider: mode === 'light' ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.08)'
+    divider: mode === 'light' ? 'rgba(75, 0, 130, 0.2)' : 'rgba(255, 105, 180, 0.2)'
   },
   typography: {
-    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+    fontFamily: '"VT323", "Orbitron", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
     h1: {
-      fontSize: '28px',
-      fontWeight: 600,
-      lineHeight: 1.3,
-      letterSpacing: '-0.02em'
+      fontFamily: '"Press Start 2P", "Orbitron", monospace',
+      fontSize: '24px',
+      fontWeight: 400,
+      lineHeight: 1.5,
+      letterSpacing: '0.02em',
+      textShadow: '2px 2px 0 rgba(255, 105, 180, 0.3)'
     },
     h2: {
-      fontSize: '24px',
-      fontWeight: 600,
-      lineHeight: 1.3,
-      letterSpacing: '-0.01em'
+      fontFamily: '"Press Start 2P", "Orbitron", monospace',
+      fontSize: '20px',
+      fontWeight: 400,
+      lineHeight: 1.5,
+      letterSpacing: '0.02em',
+      textShadow: '1px 1px 0 rgba(255, 105, 180, 0.3)'
     },
     h3: {
       fontSize: '20px',
@@ -121,7 +149,7 @@ const getTheme = (mode = 'light') => createTheme({
     }
   },
   shape: {
-    borderRadius: 8
+    borderRadius: 4
   },
   breakpoints: {
     values: breakpoints
@@ -131,20 +159,23 @@ const getTheme = (mode = 'light') => createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: 4,
           padding: '10px 20px',
           fontWeight: 500,
+          border: '2px solid',
+          borderColor: 'transparent',
+          background: (theme) => theme.gradients.metallic,
+          transition: 'all 0.2s ease-in-out',
           '&:hover': {
-            backgroundColor: (theme) => 
-              theme.palette.mode === 'light' 
-                ? theme.palette.primary.light
-                : theme.palette.primary.dark
+            transform: 'translateY(-1px)',
+            borderColor: (theme) => theme.palette.primary.main,
+            background: (theme) => theme.gradients.neon
           }
         },
         contained: {
-          boxShadow: shadows.soft,
+          boxShadow: '2px 2px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
           '&:hover': {
-            boxShadow: shadows.soft
+            boxShadow: '3px 3px 0 rgba(0,0,0,0.3), -3px -3px 0 rgba(255,255,255,0.3)'
           }
         },
         outlined: {
@@ -155,10 +186,22 @@ const getTheme = (mode = 'light') => createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          boxShadow: shadows.soft,
-          border: '1px solid',
-          borderColor: (theme) => theme.palette.divider
+          borderRadius: 4,
+          border: '2px solid',
+          borderColor: (theme) => theme.palette.primary.main,
+          background: (theme) => `${theme.gradients.metallic} !important`,
+          boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: (theme) => theme.gradients.crt,
+            opacity: 0.1,
+            pointerEvents: 'none'
+          }
         }
       }
     },
@@ -166,10 +209,25 @@ const getTheme = (mode = 'light') => createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-          boxShadow: shadows.soft,
-          transition: 'box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out',
+          border: '2px solid',
+          borderColor: (theme) => theme.palette.primary.main,
+          boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
+          transition: 'all 0.2s ease-in-out',
           '&:hover': {
-            boxShadow: shadows.medium
+            transform: 'translateY(-1px)',
+            boxShadow: '4px 4px 0 rgba(0,0,0,0.3), -3px -3px 0 rgba(255,255,255,0.3)'
+          },
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: (theme) => theme.gradients.crt,
+            opacity: 0.1,
+            pointerEvents: 'none',
+            animation: 'scanline 8s linear infinite'
           }
         }
       },
@@ -203,17 +261,37 @@ const getTheme = (mode = 'light') => createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 8,
-            transition: 'border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+            borderRadius: 4,
+            border: '2px solid',
+            borderColor: (theme) => theme.palette.primary.main,
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            fontFamily: '"VT323", monospace',
+            fontSize: '18px',
+            transition: 'all 0.2s ease-in-out',
             '& fieldset': {
-              borderWidth: 1.5
+              borderWidth: 0
             },
-            '&:hover fieldset': {
-              borderColor: 'primary.main'
+            '&:hover': {
+              borderColor: (theme) => theme.palette.secondary.main,
+              transform: 'translateY(-1px)'
             },
             '&.Mui-focused': {
-              boxShadow: shadows.focus
+              borderColor: (theme) => theme.palette.secondary.main,
+              boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderWidth: 0
+              }
+            },
+            '& input': {
+              caretColor: (theme) => theme.palette.secondary.main,
+              caretShape: 'block',
+              animation: 'blink 1s step-end infinite'
             }
+          },
+          '& .MuiInputLabel-root': {
+            fontFamily: '"VT323", monospace',
+            fontSize: '18px',
+            color: (theme) => theme.palette.primary.main
           }
         }
       }

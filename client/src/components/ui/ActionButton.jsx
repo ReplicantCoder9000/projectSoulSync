@@ -38,24 +38,39 @@ const ActionButton = ({
       sx={{
         position: 'relative',
         minWidth: loading ? '120px' : undefined,
+        fontFamily: '"VT323", monospace',
+        fontSize: size === 'small' ? '14px' : size === 'large' ? '18px' : '16px',
+        border: '2px solid',
+        borderColor: variant === 'contained' ? 'transparent' : `${color}.main`,
+        boxShadow: (theme) => theme.shadows.retro,
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'translateY(-1px)',
+          boxShadow: (theme) => `${theme.shadows.retro}, 0 4px 8px rgba(0,0,0,0.1)`,
+        },
+        '&:active': {
+          transform: 'translateY(1px)',
+          boxShadow: 'none',
+        },
         '&.MuiButton-contained': {
-          boxShadow: (theme) => theme.shadows.soft,
+          background: (theme) => `linear-gradient(180deg, ${theme.palette[color].light} 0%, ${theme.palette[color].main} 100%)`,
           '&:hover': {
-            boxShadow: (theme) => theme.shadows.soft,
-            backgroundColor: (theme) => 
-              theme.palette.mode === 'light' 
-                ? theme.palette[color].light
-                : theme.palette[color].dark
+            background: (theme) => `linear-gradient(180deg, ${theme.palette[color].main} 0%, ${theme.palette[color].dark} 100%)`,
+          },
+          '&:disabled': {
+            background: 'linear-gradient(180deg, #E0E0E0 0%, #CCCCCC 100%)',
+            color: 'rgba(0, 0, 0, 0.38)',
           }
         },
         '&.MuiButton-outlined': {
-          borderWidth: 1.5,
+          backgroundColor: 'background.paper',
           '&:hover': {
-            borderWidth: 1.5,
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? `${theme.palette[color].light}50`
-                : `${theme.palette[color].dark}50`
+            backgroundColor: (theme) => `${theme.palette[color].light}15`,
+            borderColor: `${color}.dark`,
+          },
+          '&:disabled': {
+            borderColor: 'grey.300',
+            color: 'rgba(0, 0, 0, 0.38)',
           }
         },
         ...sx
@@ -68,7 +83,21 @@ const ActionButton = ({
 
   if (tooltip) {
     return (
-      <Tooltip title={tooltip} placement="top">
+      <Tooltip 
+        title={tooltip} 
+        placement="top"
+        sx={{
+          '& .MuiTooltip-tooltip': {
+            fontFamily: '"VT323", monospace',
+            fontSize: '14px',
+            border: '1px solid',
+            borderColor: 'grey.300',
+            boxShadow: (theme) => theme.shadows.retro,
+            backgroundColor: 'background.paper',
+            color: 'text.primary'
+          }
+        }}
+      >
         {button}
       </Tooltip>
     );
