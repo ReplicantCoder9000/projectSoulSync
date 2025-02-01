@@ -3,8 +3,8 @@ services:
     name: soulsync-backend
     env: node
     rootDirectory: server
-    buildCommand: npm install
-    startCommand: node src/server.js
+    buildCommand: npm ci
+    startCommand: npm start
     nodeVersion: 18.20.6
     envVars:
       - key: NODE_ENV
