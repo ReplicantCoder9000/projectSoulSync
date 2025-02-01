@@ -24,40 +24,40 @@ import Settings from './pages/Settings';
 const App = () => {
   return (
     <ReduxProvider store={store}>
-      <AuthProvider>
-      <SettingsProvider>
-        <ThemeProvider>
-        <CssBaseline />
-        <Router>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+      <Router>
+        <AuthProvider>
+          <SettingsProvider>
+            <ThemeProvider>
+              <CssBaseline />
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <MainLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate to="/dashboard" replace />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="new-entry" element={<NewEntry />} />
-              <Route path="entries" element={<Entries />} />
-              <Route path="stats" element={<Stats />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
+                {/* Protected Routes */}
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <MainLayout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<Navigate to="/dashboard" replace />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="new-entry" element={<NewEntry />} />
+                  <Route path="entries" element={<Entries />} />
+                  <Route path="stats" element={<Stats />} />
+                  <Route path="settings" element={<Settings />} />
+                </Route>
 
-            {/* Catch all */}
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </Router>
-        </ThemeProvider>
-      </SettingsProvider>
-      </AuthProvider>
+                {/* Catch all */}
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </ThemeProvider>
+          </SettingsProvider>
+        </AuthProvider>
+      </Router>
     </ReduxProvider>
   );
 };
