@@ -43,7 +43,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
-  const { register, loading, error, clearError } = useAuth();
+  const { register: handleRegister, loading, error, clearError } = useAuth();
   const [showAlert, setShowAlert] = useState(false);
 
   const formik = useFormik({
@@ -56,7 +56,7 @@ const Register = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const success = await register(values);
+        const success = await handleRegister(values);
         if (success) {
           navigate('/dashboard');
         } else {
