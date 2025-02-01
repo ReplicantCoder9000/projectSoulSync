@@ -22,9 +22,9 @@ import Settings from './pages/Settings';
 const App = () => {
   return (
     <Router>
-      <AuthProvider>
+      <ThemeProvider>
         <SettingsProvider>
-          <ThemeProvider>
+          <AuthProvider>
             <CssBaseline />
             <Routes>
               {/* Public Routes */}
@@ -51,9 +51,9 @@ const App = () => {
               {/* Catch all */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
-          </ThemeProvider>
+          </AuthProvider>
         </SettingsProvider>
-      </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 };

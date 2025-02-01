@@ -4,12 +4,14 @@ import { register, login, logout, getProfile, clearError } from '../store/slices
 import { AuthContext } from '../components/auth/AuthProvider.jsx';
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
   const dispatch = useDispatch();
-  const { user, isAuthenticated, loading, error } = useSelector((state) => state.auth);
+  const authState = useSelector((state) => state.auth);
+  const context = useContext(AuthContext);
 
+  // Return context if available (for components within AuthProvider)
   if (context) return context;
 
+  // Fallback to Redux state and actions
   const handleRegister = async (userData) => {
     try {
       await dispatch(register(userData)).unwrap();
@@ -46,14 +48,12 @@ export const useAuth = () => {
   };
 
   return {
-    user,
-    isAuthenticated,
-    loading,
-    error,
+    ...authState,
     register: handleRegister,
     login: handleLogin,
     logout: handleLogout,
     getProfile: handleGetProfile,
-    clearError: handleClearError
+    clearError: handleClearError,
+    profileChecked: false // Default value when outside AuthProvider
   };
 };
