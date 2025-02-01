@@ -32,8 +32,8 @@ const StatusChip = ({
     }
 
     return {
-      bgcolor: theme.palette.primary[100],
-      color: theme.palette.primary.main
+      bgcolor: theme.palette.primary.light,
+      color: theme.palette.primary.dark
     };
   };
 
