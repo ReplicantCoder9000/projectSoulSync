@@ -12,10 +12,10 @@ const NewEntryButton = ({ onClick }) => {
         sx={{
           width: 56,
           height: 56,
-          boxShadow: (theme) => theme.shadows.medium,
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
           '&:hover': {
             backgroundColor: (theme) => theme.palette.primary.dark,
-            boxShadow: (theme) => theme.shadows.medium
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)'
           }
         }}
       >
