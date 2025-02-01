@@ -1,11 +1,12 @@
 import { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth as useReduxAuth } from '../../hooks/useAuth';
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const { isAuthenticated, getProfile } = useAuth();
+  const auth = useReduxAuth();
+  const { isAuthenticated, getProfile } = auth;
   const [profileChecked, setProfileChecked] = useState(false);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   }, [isAuthenticated, getProfile, profileChecked]);
 
   return (
-    <AuthContext.Provider value={{ profileChecked }}>
+    <AuthContext.Provider value={{ ...auth, profileChecked }}>
       {children}
     </AuthContext.Provider>
   );
