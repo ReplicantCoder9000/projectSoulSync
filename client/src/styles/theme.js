@@ -1,5 +1,22 @@
 import { createTheme } from '@mui/material/styles';
 
+// Windows 95 color palette
+const win95Colors = {
+  titleBarActive: '#000080',      // Classic Windows title bar blue
+  titleBarGradient: '#1084d0',    // Title bar gradient end
+  buttonFace: '#C0C0C0',         // Default button/window color
+  buttonLight: '#FFFFFF',         // Button highlight
+  buttonShadow: '#808080',       // Button shadow
+  buttonDarkShadow: '#000000',   // Dark button shadow
+  windowFrame: '#DFDFDF',        // Window frame color
+  dialogBackground: '#ECE9D8',   // Dialog background
+  textPrimary: '#000000',        // Primary text color
+  textInactive: '#808080',       // Inactive text
+  accent1: '#6A5ACD',           // Slate blue (gender-neutral primary)
+  accent2: '#9DC183',           // Sage green (gender-neutral secondary)
+  accent3: '#D4C5B9'            // Warm beige (gender-neutral accent)
+};
+
 // Spacing system based on 8px grid
 export const spacing = {
   xs: '0.25rem',   // 4px
@@ -10,14 +27,21 @@ export const spacing = {
   xxl: '3rem'      // 48px
 };
 
-// Custom shadows with retro beveled effects
+// Windows 95-style shadows
 export const shadows = {
-  soft: '2px 2px 0 rgba(0, 0, 0, 0.1), -1px -1px 0 rgba(255, 255, 255, 0.8)',
-  medium: '3px 3px 0 rgba(0, 0, 0, 0.15), -1px -1px 0 rgba(255, 255, 255, 0.9)',
-  strong: '4px 4px 0 rgba(0, 0, 0, 0.2), -2px -2px 0 rgba(255, 255, 255, 1)',
-  focus: '0 0 0 2px rgba(75, 0, 130, 0.2)',  // Electric indigo with opacity
-  window: '2px 2px 4px rgba(0, 0, 0, 0.2), -1px -1px 2px rgba(255, 255, 255, 0.8)',
-  retro: '2px 2px 0 rgba(0, 0, 0, 0.2), -2px -2px 0 rgba(255, 255, 255, 0.5)'
+  button: `inset -1px -1px 0 ${win95Colors.buttonDarkShadow},
+           inset 1px 1px 0 ${win95Colors.buttonLight},
+           inset -2px -2px 0 ${win95Colors.buttonShadow},
+           inset 2px 2px 0 ${win95Colors.windowFrame}`,
+  buttonPressed: `inset -1px -1px 0 ${win95Colors.buttonLight},
+                  inset 1px 1px 0 ${win95Colors.buttonDarkShadow},
+                  inset -2px -2px 0 ${win95Colors.windowFrame},
+                  inset 2px 2px 0 ${win95Colors.buttonShadow}`,
+  window: `inset -1px -1px 0 ${win95Colors.buttonDarkShadow},
+           inset 1px 1px 0 ${win95Colors.buttonLight}`,
+  field: `inset -1px -1px 0 ${win95Colors.buttonLight},
+          inset 1px 1px 0 ${win95Colors.buttonShadow}`,
+  focus: `0 0 0 1px ${win95Colors.accent1}`
 };
 
 // Breakpoints for responsive design
@@ -29,127 +53,90 @@ export const breakpoints = {
   xl: 1920
 };
 
-// Y2K-inspired gradients and effects
+// Windows 95-inspired gradients
 export const gradients = {
-  auth: 'linear-gradient(135deg, #4B0082 0%, #FF69B4 100%)',  // Electric indigo to hot pink
-  primary: 'linear-gradient(135deg, #9370DB 0%, #4B0082 100%)',  // Medium purple to electric indigo
-  secondary: 'linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%)',  // Light pink to hot pink
-  window: 'linear-gradient(180deg, #C0C0C0 0%, #FFFFFF 100%)',  // Classic window gradient
-  background: 'linear-gradient(135deg, #F8F8FF 0%, #E6E6FA 100%)',  // Ghost white to lavender
-  metallic: 'linear-gradient(180deg, #E8E8E8 0%, #B0B0B0 50%, #E8E8E8 100%)',  // Metallic effect
-  crt: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px)',  // CRT scanline effect
-  neon: 'linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FF1493 100%)',  // Neon pink
-  electric: 'linear-gradient(135deg, #00FFFF 0%, #4169E1 50%, #00FFFF 100%)'  // Electric blue
-};
-
-// Y2K animation keyframes
-export const keyframes = {
-  blink: {
-    '0%, 100%': { opacity: 1 },
-    '50%': { opacity: 0 }
-  },
-  scanline: {
-    '0%': { transform: 'translateY(-100%)' },
-    '100%': { transform: 'translateY(100%)' }
-  },
-  static: {
-    '0%, 100%': { opacity: 0.3 },
-    '50%': { opacity: 0.1 }
-  }
+  titleBar: `linear-gradient(180deg, ${win95Colors.titleBarActive} 0%, ${win95Colors.titleBarGradient} 100%)`,
+  window: `linear-gradient(180deg, ${win95Colors.windowFrame} 0%, ${win95Colors.buttonFace} 100%)`,
+  background: `linear-gradient(135deg, #E6EFF6 0%, #F0F0F0 100%)`,
+  primary: `linear-gradient(180deg, ${win95Colors.accent1} 0%, ${win95Colors.accent1} 100%)`,
+  secondary: `linear-gradient(180deg, ${win95Colors.accent2} 0%, ${win95Colors.accent2} 100%)`,
+  accent: `linear-gradient(180deg, ${win95Colors.accent3} 0%, ${win95Colors.accent3} 100%)`
 };
 
 const getTheme = (mode = 'light') => createTheme({
   palette: {
     mode,
     primary: {
-      main: '#FF1493',     // Deep pink
-      light: '#FF69B4',    // Hot pink
-      dark: '#C71585'      // Medium violet red
+      main: win95Colors.accent1,
+      light: win95Colors.accent2,
+      dark: win95Colors.accent3
     },
     secondary: {
-      main: '#4169E1',     // Royal blue
-      light: '#00FFFF',    // Cyan
-      dark: '#0000CD'      // Medium blue
+      main: win95Colors.accent2,
+      light: win95Colors.accent3,
+      dark: win95Colors.accent1
     },
     background: {
-      default: mode === 'light' ? '#F0F0FF' : '#000033',  // Light blue-tinted / Deep blue-black
-      paper: mode === 'light' ? '#FFFFFF' : '#000066',    // White / Navy blue
-      accent: mode === 'light' ? '#E6E6FA' : '#191970'    // Lavender / Midnight blue
+      default: mode === 'light' ? '#E6EFF6' : '#000033',
+      paper: mode === 'light' ? win95Colors.buttonFace : '#000066',
+      accent: mode === 'light' ? win95Colors.windowFrame : '#191970'
     },
     text: {
-      primary: mode === 'light' ? '#000080' : '#00FFFF',      // Navy / Cyan
-      secondary: mode === 'light' ? '#4B0082' : '#FF69B4'     // Indigo / Hot pink
+      primary: win95Colors.textPrimary,
+      secondary: win95Colors.textInactive
     },
-    mood: {
-      happy: '#E6C74C',    // Muted gold
-      sad: '#7B9EC5',      // Soft blue
-      angry: '#C25D5D',    // Muted red
-      anxious: '#9B8EB4',  // Soft purple
-      neutral: '#A3A3A3',  // Medium gray
-      excited: '#E6A94C',  // Muted orange
-      peaceful: '#8FB48E'  // Sage green
-    },
-    divider: mode === 'light' ? 'rgba(75, 0, 130, 0.2)' : 'rgba(255, 105, 180, 0.2)'
+    divider: win95Colors.buttonShadow
   },
   typography: {
-    fontFamily: '"VT323", "Orbitron", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+    fontFamily: '"Microsoft Sans Serif", "VT323", system-ui, -apple-system, sans-serif',
     h1: {
-      fontFamily: '"Press Start 2P", "Orbitron", monospace',
+      fontFamily: '"Microsoft Sans Serif", system-ui',
       fontSize: '24px',
       fontWeight: 400,
-      lineHeight: 1.5,
-      letterSpacing: '0.02em',
-      textShadow: '2px 2px 0 rgba(255, 105, 180, 0.3)'
+      lineHeight: 1.5
     },
     h2: {
-      fontFamily: '"Press Start 2P", "Orbitron", monospace',
+      fontFamily: '"Microsoft Sans Serif", system-ui',
       fontSize: '20px',
       fontWeight: 400,
-      lineHeight: 1.5,
-      letterSpacing: '0.02em',
-      textShadow: '1px 1px 0 rgba(255, 105, 180, 0.3)'
+      lineHeight: 1.5
     },
     h3: {
-      fontSize: '20px',
-      fontWeight: 500,
+      fontSize: '18px',
+      fontWeight: 400,
       lineHeight: 1.4
     },
     h4: {
-      fontSize: '18px',
-      fontWeight: 500,
+      fontSize: '16px',
+      fontWeight: 400,
       lineHeight: 1.4
     },
     h5: {
-      fontSize: '16px',
-      fontWeight: 500,
+      fontSize: '14px',
+      fontWeight: 400,
       lineHeight: 1.4
     },
     h6: {
-      fontSize: '14px',
-      fontWeight: 500,
+      fontSize: '12px',
+      fontWeight: 400,
       lineHeight: 1.4
     },
     body1: {
-      fontSize: '16px',
+      fontSize: '14px',
       lineHeight: 1.5
     },
     body2: {
-      fontSize: '14px',
+      fontSize: '12px',
       lineHeight: 1.5
     },
     button: {
       textTransform: 'none',
-      fontWeight: 500,
+      fontWeight: 400,
       fontSize: '14px'
-    },
-    caption: {
-      fontSize: '12px',
-      lineHeight: 1.5,
-      color: mode === 'light' ? '#666666' : '#A0A0A0'
     }
   },
   shape: {
-    borderRadius: 4
+    borderRadius: 0
   },
   breakpoints: {
     values: breakpoints
@@ -159,100 +146,21 @@ const getTheme = (mode = 'light') => createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 4,
-          padding: '10px 20px',
-          fontWeight: 500,
-          border: '2px solid',
-          borderColor: 'transparent',
-          background: (theme) => theme.gradients.metallic,
-          transition: 'all 0.2s ease-in-out',
+          borderRadius: 0,
+          padding: '6px 16px',
+          minHeight: '23px',
+          fontWeight: 400,
+          backgroundColor: win95Colors.buttonFace,
+          color: win95Colors.textPrimary,
+          boxShadow: shadows.button,
+          textTransform: 'none',
           '&:hover': {
-            transform: 'translateY(-1px)',
-            borderColor: (theme) => theme.palette.primary.main,
-            background: (theme) => theme.gradients.neon
-          }
-        },
-        contained: {
-          boxShadow: '2px 2px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
-          '&:hover': {
-            boxShadow: '3px 3px 0 rgba(0,0,0,0.3), -3px -3px 0 rgba(255,255,255,0.3)'
-          }
-        },
-        outlined: {
-          borderWidth: 1.5
-        }
-      }
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 4,
-          border: '2px solid',
-          borderColor: (theme) => theme.palette.primary.main,
-          background: (theme) => `${theme.gradients.metallic} !important`,
-          boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: (theme) => theme.gradients.crt,
-            opacity: 0.1,
-            pointerEvents: 'none'
-          }
-        }
-      }
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none',
-          border: '2px solid',
-          borderColor: (theme) => theme.palette.primary.main,
-          boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
-          transition: 'all 0.2s ease-in-out',
-          '&:hover': {
-            transform: 'translateY(-1px)',
-            boxShadow: '4px 4px 0 rgba(0,0,0,0.3), -3px -3px 0 rgba(255,255,255,0.3)'
+            backgroundColor: win95Colors.buttonFace
           },
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: (theme) => theme.gradients.crt,
-            opacity: 0.1,
-            pointerEvents: 'none',
-            animation: 'scanline 8s linear infinite'
-          }
-        }
-      },
-      defaultProps: {
-        elevation: 0
-      }
-    },
-    MuiFab: {
-      styleOverrides: {
-        root: {
-          boxShadow: shadows.medium,
-          '&:hover': {
-            boxShadow: shadows.medium
-          }
-        }
-      }
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          borderRadius: 6,
-          height: 28,
-          fontWeight: 500,
-          '&.MuiChip-outlined': {
-            borderWidth: 1.5
+          '&:active': {
+            backgroundColor: win95Colors.buttonFace,
+            boxShadow: shadows.buttonPressed,
+            transform: 'translateY(1px)'
           }
         }
       }
@@ -261,80 +169,41 @@ const getTheme = (mode = 'light') => createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 4,
-            border: '2px solid',
-            borderColor: (theme) => theme.palette.primary.main,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            fontFamily: '"VT323", monospace',
-            fontSize: '18px',
-            transition: 'all 0.2s ease-in-out',
+            borderRadius: 0,
+            backgroundColor: '#FFFFFF',
+            boxShadow: shadows.field,
             '& fieldset': {
               borderWidth: 0
             },
-            '&:hover': {
-              borderColor: (theme) => theme.palette.secondary.main,
-              transform: 'translateY(-1px)'
+            '&:hover fieldset': {
+              borderWidth: 0
             },
-            '&.Mui-focused': {
-              borderColor: (theme) => theme.palette.secondary.main,
-              boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)',
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderWidth: 0
-              }
+            '&.Mui-focused fieldset': {
+              borderWidth: 0
             },
             '& input': {
-              caretColor: (theme) => theme.palette.secondary.main,
-              caretShape: 'block',
-              animation: 'blink 1s step-end infinite'
+              padding: '4px 8px',
+              caretColor: win95Colors.textPrimary,
+              fontFamily: '"Microsoft Sans Serif", system-ui'
             }
           },
           '& .MuiInputLabel-root': {
-            fontFamily: '"VT323", monospace',
-            fontSize: '18px',
-            color: (theme) => theme.palette.primary.main
-          }
-        }
-      }
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: mode === 'light' ? '#2C2C2C' : '#FFFFFF',
-          color: mode === 'light' ? '#FFFFFF' : '#2C2C2C',
-          fontSize: '12px',
-          fontWeight: 500,
-          padding: '6px 12px',
-          borderRadius: 6
-        }
-      }
-    },
-    MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          borderRight: '1px solid',
-          borderColor: (theme) => theme.palette.divider,
-          boxShadow: 'none'
-        }
-      }
-    },
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          margin: '4px 8px',
-          padding: '10px 16px',
-          '&.Mui-selected': {
-            backgroundColor: (theme) => 
-              theme.palette.mode === 'light'
-                ? theme.palette.primary.light
-                : theme.palette.primary.dark,
-            '&:hover': {
-              backgroundColor: (theme) =>
-                theme.palette.mode === 'light'
-                  ? theme.palette.primary.light
-                  : theme.palette.primary.dark
+            fontFamily: '"Microsoft Sans Serif", system-ui',
+            fontSize: '14px',
+            color: win95Colors.textPrimary,
+            '&.Mui-focused': {
+              color: win95Colors.textPrimary
             }
           }
+        }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+          backgroundColor: win95Colors.buttonFace,
+          boxShadow: shadows.window
         }
       }
     }

@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import {
-  Container,
   Box,
   Typography,
   TextField,
   Link,
   Alert,
   styled,
-  keyframes,
   useTheme,
   InputAdornment,
   IconButton
@@ -30,92 +28,71 @@ const validationSchema = Yup.object({
     .required('Password is required')
 });
 
-const bootAnimation = keyframes`
-  0% {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-`;
-
-const RetroBackground = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  minHeight: '100vh',
+const Win95Background = styled(Box)(({ theme }) => ({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
   alignItems: 'center',
-  background: theme.palette.mode === 'dark' 
-    ? 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)'
-    : 'linear-gradient(135deg, #F8F8FF 0%, #E6E6FA 100%)',
-  overflow: 'hidden',
-  animation: `${bootAnimation} 1s ease-out`
+  justifyContent: 'center',
+  backgroundColor: theme.palette.background.default,
+  backgroundImage: `
+    linear-gradient(45deg, ${theme.palette.background.paper} 25%, transparent 25%),
+    linear-gradient(-45deg, ${theme.palette.background.paper} 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, ${theme.palette.background.paper} 75%),
+    linear-gradient(-45deg, transparent 75%, ${theme.palette.background.paper} 75%)
+  `,
+  backgroundSize: '20px 20px',
+  backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
+  padding: theme.spacing(2)
 }));
 
 const RetroTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
-    fontFamily: '"VT323", monospace',
-    fontSize: '18px',
-    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-    border: '2px solid',
-    borderColor: theme.palette.mode === 'dark' ? '#4A4A4A' : '#C0C0C0',
-    boxShadow: '2px 2px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)',
-    transition: 'all 0.2s ease-in-out',
-    height: '45px',
-    '& fieldset': {
-      borderWidth: 0
-    },
-    '&:hover': {
-      transform: 'translateY(-1px)',
-      borderColor: theme.palette.primary.main
-    },
-    '&.Mui-focused': {
-      borderColor: theme.palette.secondary.main,
-      boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)',
-      '& .MuiOutlinedInput-notchedOutline': {
-        borderWidth: 0
+    height: '22px',
+    '& input': {
+      padding: '2px 8px',
+      height: '18px',
+      fontSize: '12px',
+      fontFamily: '"Microsoft Sans Serif", system-ui',
+      '&::placeholder': {
+        fontSize: '12px',
+        opacity: 0.7
       }
     }
   },
   '& .MuiInputLabel-root': {
-    fontFamily: '"VT323", monospace',
-    fontSize: '18px',
-    color: theme.palette.mode === 'dark' ? '#888' : '#666',
-    transform: 'translate(14px, 12px) scale(1)',
-    '&.Mui-focused, &.MuiFormLabel-filled': {
-      transform: 'translate(14px, -9px) scale(0.75)',
-      color: theme.palette.primary.main
+    fontSize: '12px',
+    transform: 'translate(8px, -6px) scale(0.75)',
+    '&.Mui-focused': {
+      color: theme.palette.text.primary
     }
   },
   '& .MuiFormHelperText-root': {
-    fontFamily: '"VT323", monospace',
-    fontSize: '14px',
-    marginTop: '4px'
+    fontSize: '11px',
+    marginTop: '2px',
+    fontFamily: '"Microsoft Sans Serif", system-ui'
   }
 }));
 
 const RetroAlert = styled(Alert)(({ theme }) => ({
-  fontFamily: '"VT323", monospace',
-  fontSize: '16px',
-  padding: '4px 8px',
-  border: '2px solid',
+  fontFamily: '"Microsoft Sans Serif", system-ui',
+  fontSize: '12px',
+  padding: '6px 8px',
+  borderRadius: 0,
+  backgroundColor: theme.palette.background.paper,
+  border: '1px solid',
   borderColor: theme.palette.error.main,
-  backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-  boxShadow: '2px 2px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)',
+  boxShadow: theme.shadows.field,
   '& .MuiAlert-icon': {
-    color: theme.palette.error.main,
-    padding: '4px 0'
+    fontSize: '16px',
+    padding: 0
   }
 }));
 
 const Login = () => {
-  const [isBooting, setIsBooting] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -124,13 +101,6 @@ const Login = () => {
   const theme = useTheme();
 
   const from = location.state?.from?.pathname || '/dashboard';
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsBooting(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -164,48 +134,26 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ px: 0 }}>
-      <RetroBackground>
-        <RetroWindow
-          title="💫 Welcome Back"
-          sx={{
-            width: '100%',
-            maxWidth: 400,
-            mx: 2
-          }}
-        >
-          <Box sx={{ position: 'relative', width: '100%' }}>
-            <Typography
-              variant="h6"
-              sx={{
-                textAlign: 'center',
-                mb: 0.5,
-                fontFamily: '"Press Start 2P", monospace',
-                fontSize: '12px',
-                color: 'primary.main',
-                textShadow: '2px 2px 0 rgba(255, 105, 180, 0.2)',
-                opacity: isBooting ? 0 : 1,
-                transition: 'opacity 0.5s ease-in-out'
-              }}
-            >
-              SYSTEM STATUS: {isBooting ? 'BOOTING...' : 'ONLINE'}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              gutterBottom
-              sx={{
-                textAlign: 'center',
-                mb: 2,
-                fontFamily: '"VT323", monospace',
-                fontSize: '18px',
-                opacity: isBooting ? 0 : 1,
-                transition: 'opacity 0.5s ease-in-out',
-                textShadow: '1px 1px 0 rgba(255, 255, 255, 0.5)'
-              }}
-            >
-              Please sign in to continue
-            </Typography>
-          </Box>
+    <Win95Background>
+      <RetroWindow
+        title="Sign In to SoulSync"
+        sx={{
+          width: '100%',
+          maxWidth: 280
+        }}
+      >
+        <Box sx={{ width: '100%' }}>
+          <Typography
+            variant="body2"
+            sx={{
+              textAlign: 'center',
+              mb: 1,
+              fontFamily: '"Microsoft Sans Serif", system-ui',
+              fontSize: '12px'
+            }}
+          >
+            Please enter your credentials
+          </Typography>
 
           <LoadingState loading={loading} error={null}>
             <Box
@@ -213,14 +161,13 @@ const Login = () => {
               onSubmit={formik.handleSubmit}
               sx={{
                 width: '100%',
-                mt: 1,
                 '& .MuiTextField-root': {
-                  mb: 1.5
+                  mb: 1
                 }
               }}
             >
               {showAlert && error && (
-                <RetroAlert severity="error" onClose={handleAlertClose} sx={{ mb: 1.5 }}>
+                <RetroAlert severity="error" onClose={handleAlertClose} sx={{ mb: 1 }}>
                   {typeof error === 'string' ? error : 'Invalid credentials'}
                 </RetroAlert>
               )}
@@ -259,9 +206,12 @@ const Login = () => {
                         edge="end"
                         size="small"
                         sx={{
-                          color: theme.palette.mode === 'dark' ? '#888' : '#666',
-                          '&:hover': {
-                            color: theme.palette.primary.main
+                          width: 16,
+                          height: 16,
+                          margin: 0,
+                          padding: 0,
+                          '& .MuiSvgIcon-root': {
+                            fontSize: 14
                           }
                         }}
                       >
@@ -276,39 +226,19 @@ const Login = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                size="large"
-                sx={{
-                  mt: 2,
-                  mb: 1.5,
-                  height: '40px',
-                  fontFamily: '"Press Start 2P", monospace',
-                  fontSize: '12px',
-                  background: theme.palette.mode === 'dark'
-                    ? 'linear-gradient(45deg, #FF1493 30%, #FF69B4 90%)'
-                    : 'linear-gradient(45deg, #FF69B4 30%, #FFB6C1 90%)',
-                  border: '2px solid',
-                  borderColor: 'primary.main',
-                  boxShadow: '2px 2px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)',
-                  '&:hover': {
-                    background: theme.palette.mode === 'dark'
-                      ? 'linear-gradient(45deg, #FF69B4 30%, #FFB6C1 90%)'
-                      : 'linear-gradient(45deg, #FF1493 30%, #FF69B4 90%)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '3px 3px 0 rgba(0,0,0,0.2), -1px -1px 0 rgba(255,255,255,0.2)'
-                  }
-                }}
+                size="small"
+                sx={{ mt: 1, mb: 1 }}
                 disabled={formik.isSubmitting || loading}
               >
-                {loading ? 'CONNECTING...' : 'SIGN IN'}
+                {loading ? 'Signing in...' : 'OK'}
               </ActionButton>
 
-              <Box sx={{ textAlign: 'center', mt: 1 }}>
+              <Box sx={{ textAlign: 'center' }}>
                 <Typography 
-                  variant="body2" 
-                  color="text.secondary"
+                  variant="body2"
                   sx={{
-                    fontFamily: '"VT323", monospace',
-                    fontSize: '16px'
+                    fontFamily: '"Microsoft Sans Serif", system-ui',
+                    fontSize: '11px'
                   }}
                 >
                   Don&apos;t have an account?{' '}
@@ -316,12 +246,9 @@ const Login = () => {
                     component={RouterLink} 
                     to="/register"
                     sx={{
-                      color: 'primary.main',
+                      color: theme.palette.primary.main,
                       textDecoration: 'none',
-                      fontWeight: 'bold',
-                      textShadow: '1px 1px 0 rgba(255, 105, 180, 0.2)',
                       '&:hover': {
-                        color: 'secondary.main',
                         textDecoration: 'underline'
                       }
                     }}
@@ -332,9 +259,9 @@ const Login = () => {
               </Box>
             </Box>
           </LoadingState>
-        </RetroWindow>
-      </RetroBackground>
-    </Container>
+        </Box>
+      </RetroWindow>
+    </Win95Background>
   );
 };
 
