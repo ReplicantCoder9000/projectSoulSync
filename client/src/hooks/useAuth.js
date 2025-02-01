@@ -1,51 +1,49 @@
-import { useCallback } from 'react';
+import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { register, login, logout, getProfile, clearError } from '../store/slices/authSlice.js';
+import { AuthContext } from '../components/auth/AuthProvider.jsx';
 
 export const useAuth = () => {
+  const context = useContext(AuthContext);
   const dispatch = useDispatch();
   const { user, isAuthenticated, loading, error } = useSelector((state) => state.auth);
 
-  const handleRegister = useCallback(
-    async (userData) => {
-      try {
-        await dispatch(register(userData)).unwrap();
-        return true;
-      } catch {
-        return false;
-      }
-    },
-    [dispatch]
-  );
+  if (context) return context;
 
-  const handleLogin = useCallback(
-    async (credentials) => {
-      try {
-        await dispatch(login(credentials)).unwrap();
-        return true;
-      } catch {
-        return false;
-      }
-    },
-    [dispatch]
-  );
+  const handleRegister = async (userData) => {
+    try {
+      await dispatch(register(userData)).unwrap();
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
-  const handleLogout = useCallback(() => {
+  const handleLogin = async (credentials) => {
+    try {
+      await dispatch(login(credentials)).unwrap();
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleLogout = () => {
     dispatch(logout());
-  }, [dispatch]);
+  };
 
-  const handleGetProfile = useCallback(async () => {
+  const handleGetProfile = async () => {
     try {
       await dispatch(getProfile()).unwrap();
       return true;
-      } catch {
+    } catch {
       return false;
     }
-  }, [dispatch]);
+  };
 
-  const handleClearError = useCallback(() => {
+  const handleClearError = () => {
     dispatch(clearError());
-  }, [dispatch]);
+  };
 
   return {
     user,
