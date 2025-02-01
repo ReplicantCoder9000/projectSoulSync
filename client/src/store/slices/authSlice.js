@@ -10,7 +10,7 @@ export const register = createAsyncThunk(
       localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Registration failed');
+      return rejectWithValue(error.response?.data?.error?.message || 'Registration failed');
     }
   }
 );
@@ -23,7 +23,7 @@ export const login = createAsyncThunk(
       localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Login failed');
+      return rejectWithValue(error.response?.data?.error?.message || 'Login failed');
     }
   }
 );
@@ -35,7 +35,7 @@ export const getProfile = createAsyncThunk(
       const response = await authAPI.getProfile();
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to get profile');
+      return rejectWithValue(error.response?.data?.error?.message || 'Failed to get profile');
     }
   }
 );
@@ -79,10 +79,15 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.profileChecked = true;
+        state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.token = null;
+        state.profileChecked = false;
       })
       // Login
       .addCase(login.pending, (state) => {
@@ -95,10 +100,15 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.profileChecked = true;
+        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.token = null;
+        state.profileChecked = false;
       })
       // Get Profile
       .addCase(getProfile.pending, (state) => {
@@ -109,15 +119,15 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.profileChecked = true;
+        state.error = null;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.profileChecked = true;
-        // If profile fetch fails, clear auth state
+        state.isAuthenticated = false;
         state.user = null;
         state.token = null;
-        state.isAuthenticated = false;
+        state.profileChecked = true;
         localStorage.removeItem('token');
       });
   }

@@ -25,6 +25,15 @@ const staticAnimation = keyframes`
   }
 `;
 
+const vignetteAnimation = keyframes`
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.2;
+  }
+`;
+
 const WindowContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   border: '2px solid',
@@ -51,11 +60,11 @@ const WindowContainer = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'repeating-linear-gradient(transparent 0px, rgba(0, 0, 0, 0.05) 1px, transparent 2px)',
-    backgroundSize: '100% 2px',
-    animation: `${scanlineAnimation} 8s linear infinite`,
-    opacity: 0.1,
-    pointerEvents: 'none'
+    background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.3) 100%)',
+    animation: `${vignetteAnimation} 4s ease-in-out infinite`,
+    opacity: 0.15,
+    pointerEvents: 'none',
+    zIndex: 1
   }
 }));
 
@@ -63,7 +72,8 @@ const TitleBar = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: theme.spacing(0.5, 1),
+  padding: theme.spacing(0.25, 1),
+  minHeight: 28,
   background: theme.palette.mode === 'dark'
     ? 'linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%)'
     : 'linear-gradient(180deg, #E8E8E8 0%, #B0B0B0 50%, #E8E8E8 100%)',
@@ -78,12 +88,21 @@ const TitleBar = styled(Box)(({ theme }) => ({
     right: 0,
     height: '1px',
     background: 'rgba(255, 255, 255, 0.5)'
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '1px',
+    background: 'rgba(0, 0, 0, 0.1)'
   }
 }));
 
 const WindowButton = styled(IconButton)(({ theme, color }) => ({
-  width: 16,
-  height: 16,
+  width: 14,
+  height: 14,
   padding: 0,
   border: '1px solid',
   borderColor: theme.palette.mode === 'light' ? '#808080' : '#666666',
@@ -94,8 +113,49 @@ const WindowButton = styled(IconButton)(({ theme, color }) => ({
     transform: 'scale(1.1)'
   },
   '& .MuiSvgIcon-root': {
-    fontSize: 12,
+    fontSize: 10,
     color: '#FFFFFF'
+  },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%)',
+    pointerEvents: 'none'
+  }
+}));
+
+const ContentContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(1.5),
+  backgroundColor: 'background.paper',
+  position: 'relative',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'repeating-linear-gradient(transparent 0px, rgba(0, 0, 0, 0.05) 1px, transparent 2px)',
+    backgroundSize: '100% 2px',
+    animation: `${scanlineAnimation} 8s linear infinite`,
+    opacity: 0.1,
+    pointerEvents: 'none'
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.1) 100%)',
+    opacity: 0.1,
+    pointerEvents: 'none',
+    animation: `${staticAnimation} 4s ease-in-out infinite`
   }
 }));
 
@@ -118,9 +178,10 @@ const RetroWindow = ({ title, onClose, children, sx = {} }) => {
             variant="subtitle2"
             sx={{
               fontFamily: '"Press Start 2P", monospace',
-              fontSize: '12px',
+              fontSize: '11px',
               color: 'text.primary',
-              textShadow: '1px 1px 0 rgba(255, 105, 180, 0.3)'
+              textShadow: '1px 1px 0 rgba(255, 105, 180, 0.3)',
+              lineHeight: 1
             }}
           >
             {title}
@@ -139,27 +200,9 @@ const RetroWindow = ({ title, onClose, children, sx = {} }) => {
         </Box>
       </TitleBar>
 
-      <Box
-        sx={{
-          p: 2,
-          backgroundColor: 'background.paper',
-          position: 'relative',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.1) 100%)',
-            opacity: 0.1,
-            pointerEvents: 'none',
-            animation: `${staticAnimation} 4s ease-in-out infinite`
-          }
-        }}
-      >
+      <ContentContainer>
         {children}
-      </Box>
+      </ContentContainer>
     </WindowContainer>
   );
 };
