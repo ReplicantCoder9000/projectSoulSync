@@ -52,7 +52,7 @@ const Dashboard = () => {
           <CardContainer
             sx={{
               background: (theme) =>
-                `linear-gradient(to right, ${theme.palette.primary[100]}, ${theme.palette.secondary[100]})`,
+                `linear-gradient(to right, ${theme.palette.primary.light}, ${theme.palette.secondary.light})`,
               mb: 4
             }}
           >
