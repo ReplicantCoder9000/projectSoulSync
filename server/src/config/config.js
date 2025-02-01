@@ -10,6 +10,12 @@ export const config = {
     options: {
       logging: false,
       dialect: 'postgres',
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      },
       pool: {
         max: 5,
         min: 0,
@@ -23,14 +29,26 @@ export const config = {
 export const dbConfig = {
   development: {
     ...config.db,
-    logging: console.log
+    logging: console.log,
+    dialectOptions: {
+      ssl: false
+    }
   },
   test: {
     ...config.db,
-    logging: false
+    logging: false,
+    dialectOptions: {
+      ssl: false
+    }
   },
   production: {
     ...config.db,
-    logging: false
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
   }
 };
