@@ -1,10 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Provider as ReduxProvider } from 'react-redux';
 import AuthProvider from './components/auth/AuthProvider.jsx';
 import ThemeProvider from './components/providers/ThemeProvider.jsx';
 import SettingsProvider from './components/providers/SettingsProvider.jsx';
 import CssBaseline from '@mui/material/CssBaseline';
-import store from './store/index.js';
 
 // Layout
 import MainLayout from './components/layout/MainLayout.jsx';
@@ -23,42 +21,40 @@ import Settings from './pages/Settings';
 
 const App = () => {
   return (
-    <ReduxProvider store={store}>
-      <Router>
-        <AuthProvider>
-          <SettingsProvider>
-            <ThemeProvider>
-              <CssBaseline />
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+    <Router>
+      <AuthProvider>
+        <SettingsProvider>
+          <ThemeProvider>
+            <CssBaseline />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-                {/* Protected Routes */}
-                <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <MainLayout />
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route index element={<Navigate to="/dashboard" replace />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="new-entry" element={<NewEntry />} />
-                  <Route path="entries" element={<Entries />} />
-                  <Route path="stats" element={<Stats />} />
-                  <Route path="settings" element={<Settings />} />
-                </Route>
+              {/* Protected Routes */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <MainLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate to="/dashboard" replace />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="new-entry" element={<NewEntry />} />
+                <Route path="entries" element={<Entries />} />
+                <Route path="stats" element={<Stats />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
 
-                {/* Catch all */}
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
-              </Routes>
-            </ThemeProvider>
-          </SettingsProvider>
-        </AuthProvider>
-      </Router>
-    </ReduxProvider>
+              {/* Catch all */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </ThemeProvider>
+        </SettingsProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 
