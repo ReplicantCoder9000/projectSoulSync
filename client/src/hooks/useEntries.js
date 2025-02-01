@@ -28,8 +28,9 @@ export const useEntries = () => {
       try {
         const result = await dispatch(createEntry(entryData)).unwrap();
         return result;
-      } catch {
-        return false;
+      } catch (error) {
+        console.error('Failed to create entry:', error);
+        throw error;
       }
     },
     [dispatch]

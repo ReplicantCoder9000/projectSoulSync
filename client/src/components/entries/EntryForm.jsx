@@ -42,7 +42,7 @@ const EntryForm = ({ open, onClose }) => {
       tags: ''
     },
     validationSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
+    onSubmit: async (values, { setSubmitting, resetForm, setFieldError }) => {
       try {
         const tags = values.tags
           ? values.tags.split(',').map(tag => tag.trim())
@@ -52,6 +52,7 @@ const EntryForm = ({ open, onClose }) => {
         onClose();
       } catch (error) {
         console.error('Failed to create entry:', error);
+        setFieldError('submit', error.message || 'Failed to create entry. Please try again.');
       } finally {
         setSubmitting(false);
       }
@@ -60,8 +61,10 @@ const EntryForm = ({ open, onClose }) => {
 
   const handleClose = () => {
     formik.resetForm();
+    formik.setErrors({});
     onClose();
   };
+
 
   return (
     <Dialog

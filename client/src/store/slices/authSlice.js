@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authAPI } from '../../services/api.js';
+import { authAPI, resetAPI } from '../../services/api.js';
 
 // Async thunks
 export const register = createAsyncThunk(
@@ -58,6 +58,7 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
       state.error = null;
+      resetAPI(); // Reset API instance to clear any stored headers
     },
     clearError: (state) => {
       state.error = null;
