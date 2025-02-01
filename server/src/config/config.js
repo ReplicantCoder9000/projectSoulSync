@@ -2,7 +2,9 @@ export const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: process.env.PORT || 5001,
   jwtSecret: process.env.JWT_SECRET || 'your-secret-key',
-  corsOrigin: process.env.CORS_ORIGIN || ['http://localhost:5173', 'http://localhost:5174'],
+  corsOrigin: process.env.CORS_ORIGIN ? 
+    process.env.CORS_ORIGIN.split(',') : 
+    ['http://localhost:5173', 'http://localhost:5174', 'https://soulsync.netlify.app'],
   db: {
     url: process.env.DATABASE_URL || 'postgres://localhost:5432/mood_journal',
     options: {
