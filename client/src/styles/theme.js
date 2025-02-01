@@ -131,7 +131,7 @@ const getTheme = (mode = 'light') => createTheme({
           '&:hover': {
             backgroundColor: (theme) => 
               theme.palette.mode === 'light' 
-                ? theme.palette.primary[100]
+                ? theme.palette.primary.light
                 : theme.palette.primary.dark
           }
         },
@@ -231,12 +231,12 @@ const getTheme = (mode = 'light') => createTheme({
           '&.Mui-selected': {
             backgroundColor: (theme) => 
               theme.palette.mode === 'light'
-                ? theme.palette.primary[100]
+                ? theme.palette.primary.light
                 : theme.palette.primary.dark,
             '&:hover': {
               backgroundColor: (theme) =>
                 theme.palette.mode === 'light'
-                  ? theme.palette.primary[100]
+                  ? theme.palette.primary.light
                   : theme.palette.primary.dark
             }
           }
