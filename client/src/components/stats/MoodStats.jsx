@@ -134,10 +134,10 @@ const MoodStats = ({ entries }) => {
                   py: 0.5,
                   borderRadius: 1,
                   '&.Mui-selected': {
-                    bgcolor: 'primary.100',
-                    color: 'primary.main',
+                    bgcolor: 'primary.light',
+                    color: 'primary.dark',
                     '&:hover': {
-                      bgcolor: 'primary.100'
+                      bgcolor: 'primary.light'
                     }
                   }
                 }
