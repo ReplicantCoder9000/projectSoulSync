@@ -1,41 +1,29 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '../../store/slices/authSlice.js';
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext({
+  isAuthenticated: false,
+  user: null,
+  loading: false,
+  error: null,
+  profileChecked: false
+});
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  const { isAuthenticated } = auth;
-  const [profileChecked, setProfileChecked] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
-
-    const checkProfile = async () => {
-      if (isAuthenticated && !profileChecked) {
-        try {
-          await dispatch(getProfile()).unwrap();
-          if (mounted) {
-            setProfileChecked(true);
-          }
-        } catch (error) {
-          console.error('Failed to fetch profile:', error);
-        }
-      }
-    };
-
-    checkProfile();
-
-    return () => {
-      mounted = false;
-    };
-  }, [isAuthenticated, profileChecked, dispatch]);
+    const token = localStorage.getItem('token');
+    if (token && !auth.profileChecked) {
+      dispatch(getProfile());
+    }
+  }, [dispatch, auth.profileChecked]);
 
   return (
-    <AuthContext.Provider value={{ ...auth, profileChecked }}>
+    <AuthContext.Provider value={auth}>
       {children}
     </AuthContext.Provider>
   );

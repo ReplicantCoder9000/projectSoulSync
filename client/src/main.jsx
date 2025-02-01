@@ -12,7 +12,13 @@ import '@fontsource/orbitron/400.css';
 import '@fontsource/orbitron/500.css';
 import '@fontsource/orbitron/700.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+// Create root and render app
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Wrap app with providers in correct order:
+// 1. Redux Provider (for global state)
+// 2. App (which contains Router, Theme, Settings, and Auth providers)
+root.render(
   <React.StrictMode>
     <ReduxProvider store={store}>
       <App />

@@ -45,7 +45,8 @@ const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: !!localStorage.getItem('token'),
   loading: false,
-  error: null
+  error: null,
+  profileChecked: false
 };
 
 const authSlice = createSlice({
@@ -58,6 +59,7 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
       state.error = null;
+      state.profileChecked = false;
       resetAPI(); // Reset API instance to clear any stored headers
     },
     clearError: (state) => {
@@ -76,6 +78,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        state.profileChecked = true;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
@@ -91,6 +94,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        state.profileChecked = true;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -104,10 +108,17 @@ const authSlice = createSlice({
       .addCase(getProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
+        state.profileChecked = true;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.profileChecked = true;
+        // If profile fetch fails, clear auth state
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem('token');
       });
   }
 });
