@@ -44,7 +44,7 @@ const ActionButton = ({
             boxShadow: (theme) => theme.shadows.soft,
             backgroundColor: (theme) => 
               theme.palette.mode === 'light' 
-                ? theme.palette[color][100]
+                ? theme.palette[color].light
                 : theme.palette[color].dark
           }
         },
@@ -54,7 +54,7 @@ const ActionButton = ({
             borderWidth: 1.5,
             backgroundColor: (theme) =>
               theme.palette.mode === 'light'
-                ? `${theme.palette[color][100]}50`
+                ? `${theme.palette[color].light}50`
                 : `${theme.palette[color].dark}50`
           }
         },
