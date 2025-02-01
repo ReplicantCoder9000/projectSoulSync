@@ -165,12 +165,18 @@ const Login = () => {
       password: ''
     },
     validationSchema,
-    onSubmit: async (values) => {
-      const success = await login(values);
-      if (success) {
-        navigate(from, { replace: true });
-      } else {
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        const success = await login(values);
+        if (success) {
+          navigate(from, { replace: true });
+        } else {
+          setShowAlert(true);
+        }
+      } catch {
         setShowAlert(true);
+      } finally {
+        setSubmitting(false);
       }
     }
   });
@@ -295,7 +301,7 @@ const Login = () => {
                     boxShadow: '4px 4px 0 rgba(0,0,0,0.2), -2px -2px 0 rgba(255,255,255,0.2)'
                   }
                 }}
-                disabled={loading}
+                disabled={formik.isSubmitting || loading}
               >
                 {loading ? 'CONNECTING...' : 'SIGN IN'}
               </ActionButton>
