@@ -32,14 +32,12 @@ const getTheme = (mode = 'light') => createTheme({
     primary: {
       main: '#556B2F',     // Muted olive green
       light: '#8B9E72',    // Light sage
-      dark: '#3B4A1F',     // Deep forest
-      100: '#F4F6F0'       // Very light sage
+      dark: '#3B4A1F'      // Deep forest
     },
     secondary: {
       main: '#D4C5B9',     // Warm beige
       light: '#E8E0D9',    // Light beige
-      dark: '#A69B91',     // Taupe
-      100: '#FAF7F5'       // Lightest beige
+      dark: '#A69B91'      // Taupe
     },
     background: {
       default: mode === 'light' ? '#FAFAF8' : '#1A1A1A',  // Off-white / Dark gray
