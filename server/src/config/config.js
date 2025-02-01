@@ -4,7 +4,7 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET || 'your-secret-key',
   corsOrigin: process.env.CORS_ORIGIN ? 
     process.env.CORS_ORIGIN.split(',') : 
-    ['http://localhost:5173', 'http://localhost:5174', 'https://soulsync.netlify.app'],
+    ['http://localhost:5173', 'http://localhost:5174', 'https://soulsync.netlify.app', 'https://679dcb01272c780008deec12--soulsync.netlify.app'],
   db: {
     url: process.env.DATABASE_URL || 'postgres://localhost:5432/mood_journal',
     options: {
