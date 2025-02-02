@@ -1,4 +1,31 @@
-import db from '../models/index.js';
+import { Sequelize } from 'sequelize';
+import UserModel from '../models/user.model.js';
+import EntryModel from '../models/entry.model.js';
+
+const sequelize = new Sequelize('postgresql://journal_app_db_c496_user:CGBh2pZUfWIZuku5abLeiI18tVDrTxeO@dpg-cu4rmq5ds78s73ds0nm0-a.oregon-postgres.render.com/journal_app_db_c496', {
+  dialect: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  },
+  define: {
+    underscored: true,
+    timestamps: true
+  }
+});
+
+const User = UserModel(sequelize);
+const Entry = EntryModel(sequelize);
+await sequelize.sync();
+
+const db = {
+  sequelize,
+  User,
+  Entry
+};
 
 const mockEntries = [
   {
@@ -106,6 +133,7 @@ const createMockEntries = async () => {
     await db.sequelize.close();
   } catch (error) {
     console.error('Error creating mock entries:', error);
+    console.error('Error details:', error.message);
     process.exit(1);
   }
 };

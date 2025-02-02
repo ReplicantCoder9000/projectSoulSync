@@ -15,7 +15,7 @@ import Register from './components/auth/Register.jsx';
 // Protected Pages
 import Dashboard from './pages/Dashboard';
 import NewEntry from './pages/NewEntry';
-const Entries = () => <div>Entries</div>;
+import Entries from './pages/Entries';
 const Stats = () => <div>Stats</div>;
 import Settings from './pages/Settings';
 

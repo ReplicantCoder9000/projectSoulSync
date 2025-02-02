@@ -1,4 +1,28 @@
-import db from '../models/index.js';
+import { Sequelize } from 'sequelize';
+import UserModel from '../models/user.model.js';
+
+const sequelize = new Sequelize('postgresql://journal_app_db_c496_user:CGBh2pZUfWIZuku5abLeiI18tVDrTxeO@dpg-cu4rmq5ds78s73ds0nm0-a.oregon-postgres.render.com/journal_app_db_c496', {
+  dialect: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  },
+  define: {
+    underscored: true, // Use snake_case for column names
+    timestamps: true
+  }
+});
+
+const User = UserModel(sequelize);
+await sequelize.sync(); // Ensure tables are created
+
+const db = {
+  sequelize,
+  User
+};
 
 const createTestUser = async () => {
   try {
