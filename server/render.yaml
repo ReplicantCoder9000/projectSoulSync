@@ -6,6 +6,9 @@ services:
     buildCommand: npm install
     startCommand: npm start
     nodeVersion: 18.20.6
+    buildFilter:
+      paths:
+        - server/**
     envVars:
       - key: NODE_ENV
         value: production
