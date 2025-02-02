@@ -36,7 +36,7 @@ const validationSchema = Yup.object({
     .required('Password is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Please confirm your password')
+    .required('Confirm Password is required')
 });
 
 const Register = () => {
@@ -54,9 +54,17 @@ const Register = () => {
       confirmPassword: ''
     },
     validationSchema,
-    onSubmit: async (values, { setSubmitting }) => {
+    validateOnMount: false,
+    validateOnChange: true,
+    validateOnBlur: true,
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
-        const success = await handleRegister(values);
+        const success = await handleRegister({
+          username: values.username,
+          email: values.email,
+          password: values.password
+        });
+
         if (success) {
           navigate('/dashboard');
         } else {
@@ -64,7 +72,16 @@ const Register = () => {
         }
       } catch (err) {
         setShowAlert(true);
-        console.error('Registration error:', err);
+        if (err.response?.data?.error?.message) {
+          const errorMessage = err.response.data.error.message.toLowerCase();
+          if (errorMessage.includes('email')) {
+            setFieldError('email', 'Email already exists');
+          } else if (errorMessage.includes('username')) {
+            setFieldError('username', 'Username already exists');
+          } else {
+            console.error('Registration error:', err);
+          }
+        }
       } finally {
         setSubmitting(false);
       }
@@ -108,6 +125,7 @@ const Register = () => {
             <FormContainer
               component="form"
               onSubmit={formik.handleSubmit}
+              noValidate
             >
               {showAlert && error && (
                 <RetroAlert severity="error" onClose={handleAlertClose} sx={{ mb: 1 }}>
@@ -126,7 +144,8 @@ const Register = () => {
                 error={formik.touched.username && Boolean(formik.errors.username)}
                 helperText={formik.touched.username && formik.errors.username}
                 inputProps={{
-                  'aria-label': 'Username'
+                  'aria-label': 'Username',
+                  maxLength: 50
                 }}
                 autoComplete="username"
               />
@@ -136,15 +155,18 @@ const Register = () => {
                 id="email"
                 name="email"
                 label="Email Address"
+                type="email"
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
                 inputProps={{
-                  'aria-label': 'Email Address'
+                  'aria-label': 'Email Address',
+                  maxLength: 100
                 }}
                 autoComplete="email"
+                sx={{ mt: 2 }}
               />
 
               <RetroTextField
@@ -159,9 +181,11 @@ const Register = () => {
                 error={formik.touched.password && Boolean(formik.errors.password)}
                 helperText={formik.touched.password && formik.errors.password}
                 inputProps={{
-                  'aria-label': 'Password'
+                  'aria-label': 'Password',
+                  maxLength: 50
                 }}
                 autoComplete="new-password"
+                sx={{ mt: 2 }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -199,9 +223,11 @@ const Register = () => {
                 error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
                 helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                 inputProps={{
-                  'aria-label': 'Confirm Password'
+                  'aria-label': 'Confirm Password',
+                  maxLength: 50
                 }}
                 autoComplete="new-password"
+                sx={{ mt: 2 }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -232,13 +258,13 @@ const Register = () => {
                 fullWidth
                 variant="contained"
                 size="small"
-                sx={commonButtonStyles.button}
+                sx={{ ...commonButtonStyles.button, mt: 3 }}
                 disabled={loading || formik.isSubmitting}
               >
                 {loading ? 'Creating...' : 'Create Account'}
               </ActionButton>
 
-              <Box sx={{ textAlign: 'center' }}>
+              <Box sx={{ textAlign: 'center', mt: 2 }}>
                 <Typography 
                   variant="body2"
                   sx={commonTypographyStyles.link}
