@@ -18,14 +18,7 @@ const win95Colors = {
 };
 
 // Spacing system based on 8px grid
-export const spacing = {
-  xs: '0.25rem',   // 4px
-  sm: '0.5rem',    // 8px
-  md: '1rem',      // 16px
-  lg: '1.5rem',    // 24px
-  xl: '2rem',      // 32px
-  xxl: '3rem'      // 48px
-};
+const spacing = 8; // Base spacing unit in pixels
 
 // Windows 95-style shadows
 export const shadows = {
@@ -63,7 +56,8 @@ export const gradients = {
   accent: `linear-gradient(180deg, ${win95Colors.accent3} 0%, ${win95Colors.accent3} 100%)`
 };
 
-const getTheme = (mode = 'light') => createTheme({
+const getTheme = (mode = 'light') => {
+  const theme = createTheme({
   palette: {
     mode,
     primary: {
@@ -141,7 +135,7 @@ const getTheme = (mode = 'light') => createTheme({
   breakpoints: {
     values: breakpoints
   },
-  spacing: spacing,
+  spacing: spacing, // Use the base spacing unit
   components: {
     MuiButton: {
       styleOverrides: {
@@ -208,7 +202,10 @@ const getTheme = (mode = 'light') => createTheme({
       }
     }
   }
-});
+  });
+
+  return theme;
+};
 
 const theme = getTheme();
 

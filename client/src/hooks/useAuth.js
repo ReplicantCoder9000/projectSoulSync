@@ -16,7 +16,8 @@ export const useAuth = () => {
     try {
       await dispatch(register(userData)).unwrap();
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Registration error:', error);
       return false;
     }
   };
@@ -25,7 +26,8 @@ export const useAuth = () => {
     try {
       await dispatch(login(credentials)).unwrap();
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Login error:', error);
       return false;
     }
   };
@@ -38,7 +40,8 @@ export const useAuth = () => {
     try {
       await dispatch(getProfile()).unwrap();
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Get profile error:', error);
       return false;
     }
   };

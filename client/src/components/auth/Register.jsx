@@ -59,6 +59,7 @@ const Register = () => {
     validateOnBlur: true,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
+        await validationSchema.validate(values, { abortEarly: false });
         const success = await handleRegister({
           username: values.username,
           email: values.email,

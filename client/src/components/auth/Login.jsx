@@ -39,7 +39,6 @@ const Login = () => {
   const location = useLocation();
   const { login, loading, error, clearError } = useAuth();
   const [showAlert, setShowAlert] = useState(false);
-
   const from = location.state?.from?.pathname || '/dashboard';
 
   const formik = useFormik({
@@ -112,8 +111,8 @@ const Login = () => {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
+                error={Boolean(formik.errors.email)}
+                helperText={formik.errors.email}
                 inputProps={{
                   'aria-label': 'Email Address'
                 }}
@@ -129,8 +128,8 @@ const Login = () => {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
+                error={Boolean(formik.errors.password)}
+                helperText={formik.errors.password}
                 inputProps={{
                   'aria-label': 'Password'
                 }}

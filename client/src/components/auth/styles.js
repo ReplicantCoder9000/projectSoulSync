@@ -25,11 +25,11 @@ export const Win95Background = styled(Box)(({ theme }) => ({
 
 // Windows 95-style text field
 export const RetroTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: '16px',
   '& .MuiOutlinedInput-root': {
-    height: '22px',
+    minHeight: '32px',
     '& input': {
-      padding: '2px 8px',
-      height: '18px',
+      padding: '8px',
       fontSize: '12px',
       fontFamily: '"Microsoft Sans Serif", system-ui',
       '&::placeholder': {
@@ -66,7 +66,8 @@ export const RetroTextField = styled(TextField)(({ theme }) => ({
     fontSize: '11px',
     marginTop: '2px',
     fontFamily: '"Microsoft Sans Serif", system-ui',
-    marginLeft: '2px'
+    marginLeft: '2px',
+    color: theme.palette.error.main
   }
 }));
 
