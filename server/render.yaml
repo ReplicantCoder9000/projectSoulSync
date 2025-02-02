@@ -2,9 +2,10 @@ services:
   - type: web
     name: soulsync-backend
     env: node
+    rootDir: server
     buildCommand: npm ci
-    startCommand: NODE_ENV=production node src/server.js
-    nodeVersion: 18.20.5
+    startCommand: npm start
+    nodeVersion: 18.20.6
     envVars:
       - key: NODE_ENV
         value: production
