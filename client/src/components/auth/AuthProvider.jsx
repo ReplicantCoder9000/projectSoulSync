@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, login, logout, getProfile, clearError } from '../../store/slices/authSlice.js';
-import { AuthContext } from '../../contexts/AuthContext';
+import { register, login, logout, getProfile, clearError } from '@/store/slices/authSlice.js';
+import { AuthContext } from '@/contexts/AuthContext';
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
