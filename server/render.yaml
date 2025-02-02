@@ -2,8 +2,8 @@ services:
   - type: web
     name: soulsync-backend
     env: node
-    buildCommand: cd server && npm ci
-    startCommand: cd server && npm start
+    buildCommand: npm ci
+    startCommand: NODE_ENV=production node src/server.js
     nodeVersion: 18.20.6
     envVars:
       - key: NODE_ENV
@@ -11,11 +11,11 @@ services:
       - key: PORT
         value: 10000
       - key: JWT_SECRET
-        value: 8f9a12b3c4d5e6f7g8h9i0j1k213m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0
+        value: 8f9a12b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0
       - key: DATABASE_URL
         value: postgresql://journal_app_db_c496_user:CGBh2pZUfWIZuku5abLeiI18tVDrTxeO@dpg-cu4rmq5ds78s73ds0nm0-a.oregon-postgres.render.com/journal_app_db_c496
-      - key: CORS_ORIGIN
-        value: https://soulsync.netlify.app
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://soulsync.netlify.app,https://679e6bf092f0a8dc3d5ee08b--soulsync.netlify.app,http://localhost:5173
       - key: RATE_LIMIT_MAX_REQUESTS
         value: 100
       - key: RATE_LIMIT_WINDOW_MS
