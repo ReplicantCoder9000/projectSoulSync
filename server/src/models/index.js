@@ -35,17 +35,8 @@ const testConnection = async () => {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
     
-    // Force sync in development mode only
-    const force = process.env.NODE_ENV === 'development';
-    
-    // Sync User model first
-    await User.sync({ force });
-    console.log('User model synchronized.');
-    
-    // Then sync Entry model
-    await Entry.sync({ force });
-    console.log('Entry model synchronized.');
-    
+    // Only sync models, don't force sync in production
+    await sequelize.sync({ force: false });
     console.log('All models synchronized successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
