@@ -110,7 +110,12 @@ const entriesSlice = createSlice({
       })
       .addCase(createEntry.fulfilled, (state, action) => {
         state.loading = false;
-        state.entries.unshift(action.payload.entry);
+        if (action.payload && action.payload.entry) {
+          state.entries.unshift(action.payload.entry);
+        } else if (action.payload) {
+          // If entry is directly in the payload
+          state.entries.unshift(action.payload);
+        }
       })
       .addCase(createEntry.rejected, (state, action) => {
         state.loading = false;

@@ -110,27 +110,60 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
       tags: ''
     },
     validationSchema,
-    onSubmit: async (values, { setSubmitting, resetForm, setFieldError }) => {
-      try {
-        const tags = values.tags
-          ? values.tags.split(',').map(tag => tag.trim())
-          : [];
-        const entryData = { ...values, tags };
-        
-        if (isPage && onSubmit) {
-          await onSubmit(entryData);
-          onClose(true);
-        } else {
-          await createEntry(entryData);
-          onClose();
-        }
-        resetForm();
-      } catch (error) {
-        console.error('Failed to create entry:', error);
-        setFieldError('submit', error.message || 'Failed to create entry. Please try again.');
-      } finally {
-        setSubmitting(false);
+  onSubmit: async (values, { setSubmitting, resetForm, setFieldError, setStatus }) => {
+    try {
+      // Validate required fields
+      if (!values.mood) {
+        setFieldError('mood', 'Please select a mood');
+        return;
       }
+      if (!values.title) {
+        setFieldError('title', 'Title is required');
+        return;
+      }
+      if (!values.content) {
+        setFieldError('content', 'Content is required');
+        return;
+      }
+
+      const tags = values.tags
+        ? values.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+        : [];
+
+      const entryData = {
+        title: values.title,
+        content: values.content,
+        mood: values.mood,
+        tags,
+        date: new Date()
+      };
+      
+      console.log('Submitting entry:', entryData);
+      
+      if (isPage && onSubmit) {
+        await onSubmit(entryData);
+        onClose(true);
+      } else {
+        const result = await createEntry(entryData);
+        console.log('Entry creation result:', result);
+        
+        if (result && result.entry) {
+          console.log('Entry created successfully:', result.entry);
+          resetForm();
+          onClose();
+        } else {
+          console.error('Invalid entry creation response:', result);
+          setStatus({ error: 'Failed to create entry. Please try again.' });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to create entry:', error);
+      setStatus({ 
+        error: error.response?.data?.error || error.message || 'Failed to create entry. Please try again.' 
+      });
+    } finally {
+      setSubmitting(false);
+    }
     }
   });
 
@@ -229,11 +262,24 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
           multiline
           rows={6}
           value={formik.values.content}
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            formik.setFieldValue('content', e.target.value);
+            formik.setFieldTouched('content', true, false);
+          }}
           onBlur={formik.handleBlur}
           error={formik.touched.content && Boolean(formik.errors.content)}
           helperText={formik.touched.content && formik.errors.content}
           margin="normal"
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: '#FFFFFF',
+              '& textarea': {
+                fontFamily: '"VT323", monospace',
+                fontSize: '16px',
+                lineHeight: '1.5'
+              }
+            }
+          }}
         />
 
         <RetroTextField
@@ -261,7 +307,7 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
         <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 4 }}>
           <ActionButton
             variant="outlined"
-            color="inherit"
+            color="primary"
             onClick={() => onClose()}
             sx={{
               fontFamily: '"Press Start 2P", monospace',

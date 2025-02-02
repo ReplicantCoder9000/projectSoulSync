@@ -19,11 +19,27 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
+      console.log('authSlice: Attempting login with credentials', credentials.email);
       const data = await authAPI.login(credentials);
+      console.log('authSlice: Received response:', data);
+      
+      if (!data || !data.token || !data.user) {
+        console.error('authSlice: Invalid response format:', data);
+        return rejectWithValue('Invalid server response format');
+      }
+      
       localStorage.setItem('token', data.token);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error?.message || 'Login failed');
+      console.error('authSlice: Login error:', error);
+      if (error.response?.status === 401) {
+        return rejectWithValue('Invalid email or password');
+      } else if (error.code === 'ECONNABORTED') {
+        return rejectWithValue('Request timed out. Please try again.');
+      } else if (!error.response) {
+        return rejectWithValue('Network error. Please check your connection.');
+      }
+      return rejectWithValue(error.response?.data?.error?.message || 'Login failed. Please try again.');
     }
   }
 );

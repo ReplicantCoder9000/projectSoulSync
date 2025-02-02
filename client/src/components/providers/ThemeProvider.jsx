@@ -8,9 +8,10 @@ const ThemeProvider = ({ children }) => {
   const themeMode = useSelector((state) => state.settings.theme);
   const baseTheme = getTheme(themeMode);
 
-  // Extend the theme with custom properties
+  // Extend the theme with custom properties while preserving shadows
   const theme = createTheme({
     ...baseTheme,
+    shadows: baseTheme.shadows, // Explicitly preserve shadows
     gradients: {
       auth: 'linear-gradient(135deg, #4B0082 0%, #FF69B4 100%)',
       primary: 'linear-gradient(135deg, #9370DB 0%, #4B0082 100%)',

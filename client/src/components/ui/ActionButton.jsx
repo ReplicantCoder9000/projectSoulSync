@@ -53,9 +53,9 @@ const ActionButton = ({
           boxShadow: 'none',
         },
         '&.MuiButton-contained': {
-          background: (theme) => `linear-gradient(180deg, ${theme.palette[color].light} 0%, ${theme.palette[color].main} 100%)`,
+          background: (theme) => color === 'inherit' ? theme.palette.grey[300] : `linear-gradient(180deg, ${theme.palette[color]?.light || theme.palette.primary.light} 0%, ${theme.palette[color]?.main || theme.palette.primary.main} 100%)`,
           '&:hover': {
-            background: (theme) => `linear-gradient(180deg, ${theme.palette[color].main} 0%, ${theme.palette[color].dark} 100%)`,
+            background: (theme) => color === 'inherit' ? theme.palette.grey[400] : `linear-gradient(180deg, ${theme.palette[color]?.main || theme.palette.primary.main} 0%, ${theme.palette[color]?.dark || theme.palette.primary.dark} 100%)`,
           },
           '&:disabled': {
             background: 'linear-gradient(180deg, #E0E0E0 0%, #CCCCCC 100%)',
@@ -119,7 +119,8 @@ ActionButton.propTypes = {
     'error',
     'warning',
     'info',
-    'success'
+    'success',
+    'inherit'
   ]),
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   fullWidth: PropTypes.bool,

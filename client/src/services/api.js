@@ -98,10 +98,26 @@ export const authAPI = {
   },
   login: async (credentials) => {
     try {
+      console.log('API: Sending login request');
+      if (!credentials.email || !credentials.password) {
+        throw new Error('Email and password are required');
+      }
+      
       const response = await api.post('/auth/login', credentials);
+      console.log('API: Received login response:', response.status);
+      
+      if (!response.data || !response.data.token || !response.data.user) {
+        console.error('API: Invalid response format:', response.data);
+        throw new Error('Invalid response format from server');
+      }
+      
       return response.data;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('API: Login error:', {
+        status: error.response?.status,
+        message: error.response?.data?.error?.message || error.message,
+        code: error.code
+      });
       throw error;
     }
   },

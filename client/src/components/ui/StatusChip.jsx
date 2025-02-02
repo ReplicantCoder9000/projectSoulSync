@@ -14,15 +14,18 @@ const StatusChip = ({
   const theme = useTheme();
 
   const getChipColors = () => {
-    if (type === 'mood') {
+    if (type === 'mood' && label) {
       const moodColor = theme.palette.mood[label.toLowerCase()];
-      return {
-        bgcolor: variant === 'outlined' ? 'transparent' : moodColor,
-        color: variant === 'outlined' ? theme.palette.text.primary : '#FFF',
-        borderColor: moodColor
-      };
+      if (moodColor) {
+        return {
+          bgcolor: variant === 'outlined' ? 'transparent' : moodColor,
+          color: variant === 'outlined' ? theme.palette.text.primary : '#FFF',
+          borderColor: moodColor
+        };
+      }
     }
     
+    // Default colors for non-mood chips or when mood color is not found
     if (variant === 'outlined') {
       return {
         bgcolor: 'transparent',

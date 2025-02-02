@@ -48,14 +48,19 @@ const Login = () => {
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
+      setShowAlert(false); // Reset alert state
       try {
+        console.log('Attempting login...', values.email);
         const success = await login(values);
+        console.log('Login response:', success);
         if (success) {
           navigate(from, { replace: true });
         } else {
+          console.error('Login failed without throwing error');
           setShowAlert(true);
         }
-      } catch {
+      } catch (err) {
+        console.error('Login error:', err);
         setShowAlert(true);
       } finally {
         setSubmitting(false);
@@ -97,9 +102,9 @@ const Login = () => {
               component="form"
               onSubmit={formik.handleSubmit}
             >
-              {showAlert && error && (
+              {(showAlert || error) && (
                 <RetroAlert severity="error" onClose={handleAlertClose} sx={{ mb: 1 }}>
-                  {typeof error === 'string' ? error : 'Invalid credentials'}
+                  {typeof error === 'string' ? error : 'Invalid credentials. Please check your email and password.'}
                 </RetroAlert>
               )}
 

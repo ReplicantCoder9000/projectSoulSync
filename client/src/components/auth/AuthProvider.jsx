@@ -1,15 +1,8 @@
-import { createContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfile } from '../../store/slices/authSlice.js';
-
-export const AuthContext = createContext({
-  isAuthenticated: false,
-  user: null,
-  loading: false,
-  error: null,
-  profileChecked: false
-});
+import { register, login, logout, getProfile, clearError } from '../../store/slices/authSlice.js';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
@@ -22,8 +15,55 @@ export const AuthProvider = ({ children }) => {
     }
   }, [dispatch, auth.profileChecked]);
 
+  const handleLogin = async (credentials) => {
+    try {
+      await dispatch(login(credentials)).unwrap();
+      return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
+    }
+  };
+
+  const handleRegister = async (userData) => {
+    try {
+      await dispatch(register(userData)).unwrap();
+      return true;
+    } catch (error) {
+      console.error('Registration error:', error);
+      return false;
+    }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const handleGetProfile = async () => {
+    try {
+      await dispatch(getProfile()).unwrap();
+      return true;
+    } catch (error) {
+      console.error('Get profile error:', error);
+      return false;
+    }
+  };
+
+  const handleClearError = () => {
+    dispatch(clearError());
+  };
+
+  const value = {
+    ...auth,
+    login: handleLogin,
+    register: handleRegister,
+    logout: handleLogout,
+    getProfile: handleGetProfile,
+    clearError: handleClearError
+  };
+
   return (
-    <AuthContext.Provider value={auth}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -30,7 +30,7 @@ const Dashboard = () => {
 
     // Cleanup function to clear interval
     return () => clearInterval(pollInterval);
-  }, []); // Remove getEntries from dependencies to prevent unnecessary re-renders
+  }, []); // Empty dependency array since getEntries is stable (from Redux)
 
   // Update recent entries when entries change
   useEffect(() => {
@@ -76,6 +76,7 @@ const Dashboard = () => {
                   label={`${entries?.length || 0} Total`}
                   variant="outlined"
                   size="small"
+                  type="tag"
                 />
               }
             />
