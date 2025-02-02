@@ -134,6 +134,9 @@ const createMockEntries = async () => {
   } catch (error) {
     console.error('Error creating mock entries:', error);
     console.error('Error details:', error.message);
+    if (error.name === 'SequelizeValidationError') {
+      console.error('Validation errors:', error.errors);
+    }
     process.exit(1);
   }
 };

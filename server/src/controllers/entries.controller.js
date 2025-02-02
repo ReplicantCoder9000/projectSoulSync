@@ -25,8 +25,23 @@ export const createEntry = async (req, res, next) => {
 
 export const getEntries = async (req, res, next) => {
   try {
+    console.log('Entries Controller: Starting getEntries request');
+    console.log('Entries Controller: User:', {
+      id: req.user.id,
+      email: req.user.email
+    });
+    console.log('Entries Controller: Headers:', {
+      authorization: req.headers.authorization ? 'Present' : 'Missing',
+      contentType: req.headers['content-type']
+    });
+    console.log('Entries Controller: Query params:', req.query);
+
     const { page = 1, limit = 10, mood, startDate, endDate } = req.query;
     const user_id = req.user.id;
+
+    // Validate pagination params
+    const validatedPage = Math.max(1, parseInt(page));
+    const validatedLimit = Math.min(100, Math.max(1, parseInt(limit)));
 
     // Build where clause
     const where = { user_id };
@@ -39,28 +54,60 @@ export const getEntries = async (req, res, next) => {
       if (endDate) where.date[db.Sequelize.Op.lte] = new Date(endDate);
     }
 
-    // Calculate offset
-    const offset = (page - 1) * limit;
+    console.log('Entries Controller: Query parameters:', {
+      where,
+      page: validatedPage,
+      limit: validatedLimit,
+      offset: (validatedPage - 1) * validatedLimit
+    });
 
     // Get entries with pagination
     const { count, rows: entries } = await db.Entry.findAndCountAll({
       where,
-      limit: parseInt(limit),
-      offset: parseInt(offset),
+      limit: validatedLimit,
+      offset: (validatedPage - 1) * validatedLimit,
       order: [['date', 'DESC']],
       attributes: { exclude: ['user_id'] }
     });
 
-    res.json({
+    console.log('Entries Controller: Database query result:', {
+      totalCount: count,
+      retrievedCount: entries.length,
+      firstEntryId: entries[0]?.id,
+      lastEntryId: entries[entries.length - 1]?.id
+    });
+
+    // Validate entries array
+    if (!Array.isArray(entries)) {
+      console.error('Entries Controller: Invalid entries format:', entries);
+      throw new Error('Database returned invalid entries format');
+    }
+
+    const response = {
       message: 'Entries retrieved successfully',
-      entries,
+      entries: entries.map(entry => entry.toJSON()),
       pagination: {
         total: count,
-        page: parseInt(page),
-        pages: Math.ceil(count / limit)
+        page: validatedPage,
+        pages: Math.ceil(count / validatedLimit),
+        limit: validatedLimit
       }
+    };
+
+    console.log('Entries Controller: Sending response:', {
+      entriesCount: response.entries.length,
+      pagination: response.pagination,
+      firstEntry: response.entries[0]?.id
     });
+
+    res.json(response);
   } catch (error) {
+    console.error('Entries Controller: Error in getEntries:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      userId: req.user?.id
+    });
     next(error);
   }
 };

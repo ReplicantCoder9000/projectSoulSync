@@ -110,7 +110,7 @@ const Login = () => {
 
               <RetroTextField
                 fullWidth
-                id="email"
+                id="login-email"
                 name="email"
                 label="Email Address"
                 value={formik.values.email}
@@ -119,14 +119,16 @@ const Login = () => {
                 error={Boolean(formik.errors.email)}
                 helperText={formik.errors.email}
                 inputProps={{
-                  'aria-label': 'Email Address'
+                  'aria-label': 'Email Address',
+                  id: 'login-email-input',
+                  name: 'email'
                 }}
                 autoComplete="username"
               />
 
               <RetroTextField
                 fullWidth
-                id="password"
+                id="login-password"
                 name="password"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
@@ -136,7 +138,9 @@ const Login = () => {
                 error={Boolean(formik.errors.password)}
                 helperText={formik.errors.password}
                 inputProps={{
-                  'aria-label': 'Password'
+                  'aria-label': 'Password',
+                  id: 'login-password-input',
+                  name: 'password'
                 }}
                 autoComplete="current-password"
                 InputProps={{

@@ -245,6 +245,7 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
 
         <RetroTextField
           fullWidth
+          id="entry-title"
           label="Entry Title"
           name="title"
           value={formik.values.title}
@@ -253,10 +254,16 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
           error={formik.touched.title && Boolean(formik.errors.title)}
           helperText={formik.touched.title && formik.errors.title}
           margin="normal"
+          inputProps={{
+            'aria-label': 'Entry Title',
+            id: 'entry-title-input',
+            name: 'title'
+          }}
         />
 
         <RetroTextField
           fullWidth
+          id="entry-content"
           label="Your Thoughts"
           name="content"
           multiline
@@ -270,6 +277,11 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
           error={formik.touched.content && Boolean(formik.errors.content)}
           helperText={formik.touched.content && formik.errors.content}
           margin="normal"
+          inputProps={{
+            'aria-label': 'Entry Content',
+            id: 'entry-content-input',
+            name: 'content'
+          }}
           sx={{
             '& .MuiOutlinedInput-root': {
               backgroundColor: '#FFFFFF',
@@ -284,6 +296,7 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
 
         <RetroTextField
           fullWidth
+          id="entry-tags"
           label="Tags"
           name="tags"
           value={formik.values.tags}
@@ -295,6 +308,11 @@ const EntryForm = ({ open, onClose, isPage = false, onSubmit }) => {
             '🏷️ Add tags to categorize your entry (e.g., work, family, health)'
           }
           margin="normal"
+          inputProps={{
+            'aria-label': 'Entry Tags',
+            id: 'entry-tags-input',
+            name: 'tags'
+          }}
         />
       </Stack>
     </form>

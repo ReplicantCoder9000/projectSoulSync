@@ -128,12 +128,26 @@ const entriesSlice = createSlice({
       })
       .addCase(getEntries.fulfilled, (state, action) => {
         state.loading = false;
-        state.entries = action.payload.entries;
-        state.pagination = action.payload.pagination;
+        if (action.payload?.entries && Array.isArray(action.payload.entries)) {
+          state.entries = action.payload.entries;
+          state.pagination = action.payload.pagination || {
+            total: action.payload.entries.length,
+            page: 1,
+            pages: 1
+          };
+          state.error = null;
+        } else {
+          state.error = 'Invalid response format';
+          state.entries = [];
+          state.pagination = { total: 0, page: 1, pages: 1 };
+        }
       })
       .addCase(getEntries.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload || 'Failed to fetch entries';
+        state.entries = [];
+        state.pagination = { total: 0, page: 1, pages: 1 };
+        console.error('Entries fetch failed:', action.payload);
       })
       // Get Single Entry
       .addCase(getEntry.pending, (state) => {

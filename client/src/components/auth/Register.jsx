@@ -136,7 +136,7 @@ const Register = () => {
 
               <RetroTextField
                 fullWidth
-                id="username"
+                id="register-username"
                 name="username"
                 label="Username"
                 value={formik.values.username}
@@ -146,6 +146,8 @@ const Register = () => {
                 helperText={formik.touched.username && formik.errors.username}
                 inputProps={{
                   'aria-label': 'Username',
+                  id: 'register-username-input',
+                  name: 'username',
                   maxLength: 50
                 }}
                 autoComplete="username"
@@ -153,7 +155,7 @@ const Register = () => {
 
               <RetroTextField
                 fullWidth
-                id="email"
+                id="register-email"
                 name="email"
                 label="Email Address"
                 type="email"
@@ -164,6 +166,8 @@ const Register = () => {
                 helperText={formik.touched.email && formik.errors.email}
                 inputProps={{
                   'aria-label': 'Email Address',
+                  id: 'register-email-input',
+                  name: 'email',
                   maxLength: 100
                 }}
                 autoComplete="email"
@@ -172,7 +176,7 @@ const Register = () => {
 
               <RetroTextField
                 fullWidth
-                id="password"
+                id="register-password"
                 name="password"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
@@ -183,6 +187,8 @@ const Register = () => {
                 helperText={formik.touched.password && formik.errors.password}
                 inputProps={{
                   'aria-label': 'Password',
+                  id: 'register-password-input',
+                  name: 'password',
                   maxLength: 50
                 }}
                 autoComplete="new-password"
@@ -214,7 +220,7 @@ const Register = () => {
 
               <RetroTextField
                 fullWidth
-                id="confirmPassword"
+                id="register-confirm-password"
                 name="confirmPassword"
                 label="Confirm Password"
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -225,6 +231,8 @@ const Register = () => {
                 helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                 inputProps={{
                   'aria-label': 'Confirm Password',
+                  id: 'register-confirm-password-input',
+                  name: 'confirmPassword',
                   maxLength: 50
                 }}
                 autoComplete="new-password"
