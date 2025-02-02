@@ -1,6 +1,6 @@
 [build]
   base = "client"
-  command = "CI=false npm ci && npm run build"
+  command = "CI=false npm install && npm run build"
   publish = "dist"
 
 [build.environment]
