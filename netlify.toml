@@ -1,12 +1,12 @@
 [build]
   base = "client"
-  command = "npm ci && npm run build"
+  command = "CI=false npm ci && npm run build"
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "18.20.6"
+  NODE_VERSION = "18.20.5"
   NPM_FLAGS = "--no-audit --no-fund"
-  VITE_API_URL = "https://projectsoulsync.onrender.com/api"
+  CI = "false"
 
 [[redirects]]
   from = "/*"
