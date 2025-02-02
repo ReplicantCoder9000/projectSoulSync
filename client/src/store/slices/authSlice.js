@@ -6,9 +6,9 @@ export const register = createAsyncThunk(
   'auth/register',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await authAPI.register(userData);
-      localStorage.setItem('token', response.token);
-      return response;
+      const data = await authAPI.register(userData);
+      localStorage.setItem('token', data.token);
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || 'Registration failed');
     }
@@ -19,9 +19,9 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await authAPI.login(credentials);
-      localStorage.setItem('token', response.token);
-      return response;
+      const data = await authAPI.login(credentials);
+      localStorage.setItem('token', data.token);
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || 'Login failed');
     }
@@ -32,8 +32,8 @@ export const getProfile = createAsyncThunk(
   'auth/getProfile',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await authAPI.getProfile();
-      return response;
+      const data = await authAPI.getProfile();
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error?.message || 'Failed to get profile');
     }
