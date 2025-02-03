@@ -2,7 +2,6 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 import { useAuth } from '../hooks/useAuth';
 import { useEntries } from '../hooks/useEntries';
 import { useState, useEffect, useMemo } from 'react';
-import MoodStats from '../components/stats/MoodStats';
 import CardContainer from '../components/ui/CardContainer';
 import SectionHeader from '../components/ui/SectionHeader';
 import StatusChip from '../components/ui/StatusChip';
@@ -114,30 +113,6 @@ const Dashboard = () => {
               sx={{ color: 'text.primary' }}
             />
           </CardContainer>
-        </Grid>
-
-        {/* Stats Section */}
-        <Grid item xs={12}>
-          {entriesError ? (
-            <CardContainer>
-              <Box
-                sx={{
-                  textAlign: 'center',
-                  color: 'error.main',
-                  p: 3
-                }}
-              >
-                <Typography variant="h6" gutterBottom>
-                  Error Loading Stats
-                </Typography>
-                <Typography>
-                  {entriesError.message || 'Failed to load mood statistics. Please try again.'}
-                </Typography>
-              </Box>
-            </CardContainer>
-          ) : (
-            <MoodStats entries={entries || []} />
-          )}
         </Grid>
 
         {/* Recent Entries */}

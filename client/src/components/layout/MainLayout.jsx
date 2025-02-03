@@ -23,8 +23,6 @@ import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   Add as AddIcon,
-  Book as JournalIcon,
-  BarChart as StatsIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon
 } from '@mui/icons-material';
@@ -138,8 +136,6 @@ const MainLayout = () => {
   const menuItems = [
     { text: '🗂️ Dashboard', icon: <DashboardIcon />, path: '/dashboard', description: 'View your mood overview' },
     { text: '📝 New Entry', icon: <AddIcon />, path: '/new-entry', description: 'Create a new journal entry' },
-    { text: '📂 Journal Entries', icon: <JournalIcon />, path: '/entries', description: 'Browse all entries' },
-    { text: '📊 Mood Stats', icon: <StatsIcon />, path: '/stats', description: 'Analyze your mood patterns' },
     { text: '⚙️ Settings', icon: <SettingsIcon />, path: '/settings', description: 'Customize your experience' }
   ];
 

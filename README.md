@@ -1,8 +1,8 @@
-# 🌿 SoulSync
+# 🖥️ SoulSync Y2K Edition
 
-> Your personal space for emotional reflection and growth.
+> Your personal space for emotional reflection and growth, with a nostalgic Windows 95 twist.
 
-SoulSync is a modern mood journaling application that helps you track, understand, and visualize your emotional journey. With its thoughtfully designed interface and powerful analytics, it transforms daily reflections into meaningful insights.
+SoulSync is a modern mood journaling application that helps you track and understand your emotional journey, wrapped in a delightfully retro interface. With its thoughtfully designed Windows 95-inspired UI, it transforms daily reflections into meaningful insights while taking you back to simpler times.
 
 ![Made with React](https://img.shields.io/badge/Made_with-React-61DAFB.svg?style=flat&logo=react)
 ![Powered by Node.js](https://img.shields.io/badge/Powered_by-Node.js-339933.svg?style=flat&logo=node.js)
@@ -12,19 +12,21 @@ SoulSync is a modern mood journaling application that helps you track, understan
 ## ✨ Features
 
 ### 🎨 Expressive Mood Tracking
-- Seven distinct mood states: happy, peaceful, excited, neutral, anxious, sad, and angry
+- Seven distinct mood states in classic emoticon style
 - Rich text journaling with titles and custom tags
-- Intuitive interface for quick mood logging
+- Intuitive interface with retro window design
 
-### 📊 Insightful Analytics
-- Interactive pie charts showing mood distribution
-- Trend analysis with customizable time ranges (week/month/3 months)
-- Daily entry frequency tracking
+### 🖼️ Retro-Inspired Design
+- Authentic Windows 95 aesthetic
+- Classic window frames and buttons
+- CRT screen effects and scanlines
+- Pixel-perfect icons and typography
+- Nostalgic color palette
 
 ### 🎭 Personalized Experience
-- Elegant dark and light themes
-- Nature-inspired color palette
-- Responsive design for seamless use across devices
+- Light and dark themes inspired by classic OS color schemes
+- Custom-styled components with retro shadows and borders
+- Responsive design that maintains the vintage feel across devices
 
 ### 🔒 Privacy First
 - Secure user authentication
@@ -83,13 +85,13 @@ npm run dev
 npm run dev
 ```
 
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
 - **React** with Vite for lightning-fast development
 - **Redux Toolkit** for state management
-- **Material-UI** with custom theme system
-- **Recharts** for beautiful data visualization
+- **Material-UI** with custom Windows 95 theme system
+- **Custom CSS** for authentic retro styling
 
 ### Backend
 - **Node.js** with Express
@@ -108,7 +110,7 @@ soulsync/
 │   │   ├── pages/       # Main application pages
 │   │   ├── services/    # API service layer
 │   │   ├── store/       # Redux store configuration
-│   │   └── styles/      # Global styles and theme
+│   │   └── styles/      # Retro theme and styling
 │   
 └── server/               # Backend Node.js application
     ├── src/
@@ -122,19 +124,15 @@ soulsync/
 ## 🎯 Core Features
 
 ### Mood Tracking
-- Quick-select from seven carefully chosen moods
-- Add context with journal entries
+- Quick-select from seven carefully chosen moods with retro emoticons
+- Add context with journal entries in classic window frames
 - Tag system for better organization
 
-### Analytics Dashboard
-- Visual breakdown of mood patterns
-- Time-based trend analysis
-- Entry frequency tracking
-
-### Theme System
-- Thoughtfully crafted color palette
-- Consistent component styling
-- Seamless dark/light mode switching
+### Retro Theme System
+- Authentic Windows 95 color schemes
+- Pixel-perfect component styling
+- CRT and scanline effects for immersion
+- Classic window decorations and controls
 
 ## 🤝 Contributing
 
@@ -149,4 +147,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<p align="center">Made with ❤️ for better emotional awareness</p>
+<p align="center">Made with ❤️ for better emotional awareness, powered by nostalgia</p>
