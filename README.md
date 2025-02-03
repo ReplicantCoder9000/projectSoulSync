@@ -9,6 +9,10 @@ SoulSync is a modern mood journaling application that helps you track and unders
 ![Styled with Material-UI](https://img.shields.io/badge/Styled_with-MUI-007FFF.svg?style=flat&logo=mui)
 ![PostgreSQL Database](https://img.shields.io/badge/Database-PostgreSQL-336791.svg?style=flat&logo=postgresql)
 
+##Demo
+- Email: testuser789@example.com
+- Password: TestPassword789!
+
 ## ✨ Features
 
 ### 🎨 Expressive Mood Tracking
