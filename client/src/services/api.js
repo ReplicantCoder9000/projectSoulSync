@@ -9,6 +9,14 @@ if (!API_URL) {
   Logger.error('Configuration Error', new Error('API URL is not configured'));
 }
 
+// Simple in-memory cache
+const cache = new Map();
+const CACHE_TTL = 30000; // 30 seconds
+
+const isCacheValid = (timestamp) => {
+  return Date.now() - timestamp < CACHE_TTL;
+};
+
 // Create axios instance with default config
 const createAPI = () => {
   const instance = axios.create({
@@ -16,7 +24,7 @@ const createAPI = () => {
     headers: {
       'Content-Type': 'application/json'
     },
-    timeout: 10000 // 10 second timeout
+    timeout: 5000 // 5 second timeout
   });
 
   // Add token to requests if it exists
@@ -242,6 +250,8 @@ export const entriesAPI = {
         entryId: response.data.entry.id,
         timestamp: new Date().toISOString()
       });
+      // Invalidate entries cache
+      cache.delete('entries');
       return response.data;
     } catch (error) {
       ErrorHandler.handle(error, {
@@ -265,12 +275,22 @@ export const entriesAPI = {
         throw new AppError('AUTH_001', 'No authentication token found');
       }
 
+      const cacheKey = 'entries';
+      const cachedData = cache.get(cacheKey);
+      if (cachedData && isCacheValid(cachedData.timestamp)) {
+        Logger.state('Using cached entries', {
+          timestamp: cachedData.timestamp,
+          count: cachedData.data.entries.length
+        });
+        return cachedData.data;
+      }
+
       const validatedParams = {
         page: params?.page || 1,
         limit: Math.min(params?.limit || 50, 100),
         sort: params?.sort || 'date',
         order: params?.order || 'desc',
-        timestamp: Date.now()
+        signal: params?.signal
       };
 
       Logger.state('Fetch Entries Request', {
@@ -280,7 +300,7 @@ export const entriesAPI = {
 
       const response = await api.get('/entries', {
         params: validatedParams,
-        timeout: 15000,
+        timeout: 5000,
         validateStatus: status => status === 200
       });
 
@@ -293,7 +313,7 @@ export const entriesAPI = {
       }
 
       response.data.entries.forEach((entry, index) => {
-        if (!entry.id || !entry.title || !entry.content || !entry.mood || !entry.date) {
+        if (!entry.id || !entry.content || !entry.mood || !entry.date) {
           throw new AppError('NET_004', `Invalid entry format at index ${index}`);
         }
       });
@@ -303,6 +323,12 @@ export const entriesAPI = {
         page: validatedParams.page,
         pages: Math.ceil(response.data.entries.length / validatedParams.limit)
       };
+
+      // Cache the response
+      cache.set(cacheKey, {
+        data: response.data,
+        timestamp: Date.now()
+      });
 
       Logger.state('Fetch Entries Success', {
         count: response.data.entries.length,
@@ -361,6 +387,8 @@ export const entriesAPI = {
         entryId: id,
         timestamp: new Date().toISOString()
       });
+      // Invalidate entries cache
+      cache.delete('entries');
       return response.data;
     } catch (error) {
       ErrorHandler.handle(error, {
@@ -385,6 +413,8 @@ export const entriesAPI = {
         entryId: id,
         timestamp: new Date().toISOString()
       });
+      // Invalidate entries cache
+      cache.delete('entries');
       return response.data;
     } catch (error) {
       ErrorHandler.handle(error, {

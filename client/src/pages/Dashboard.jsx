@@ -1,18 +1,19 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { useAuth } from '../hooks/useAuth';
 import { useEntries } from '../hooks/useEntries';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import MoodStats from '../components/stats/MoodStats';
 import CardContainer from '../components/ui/CardContainer';
 import SectionHeader from '../components/ui/SectionHeader';
 import StatusChip from '../components/ui/StatusChip';
-import { useRef } from 'react';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const { entries, getEntries, error: entriesError } = useEntries();
   const [recentEntries, setRecentEntries] = useState([]);
   const lastFetchTimeRef = useRef(null);
+  const requestInFlightRef = useRef(false);
+  const abortControllerRef = useRef(null);
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const POLL_INTERVAL = 30000; // 30 seconds
@@ -34,59 +35,100 @@ const Dashboard = () => {
 
   // Fetch entries with smart polling
   const fetchEntries = useCallback(async () => {
+    if (requestInFlightRef.current) {
+      console.log('Dashboard: Skipping fetch - request in flight');
+      return;
+    }
+
+    if (!isOnline) {
+      console.log('Dashboard: Skipping fetch - offline');
+      return;
+    }
+
+    // Check if enough time has passed since last fetch
+    const now = Date.now();
+    if (lastFetchTimeRef.current && now - lastFetchTimeRef.current < POLL_INTERVAL) {
+      console.log('Dashboard: Skipping fetch - too soon');
+      return;
+    }
+
     try {
-      if (!isOnline) {
-        console.log('Dashboard: Skipping fetch - offline');
-        return;
+      requestInFlightRef.current = true;
+
+      // Cancel any pending request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
       }
 
-      // Check if enough time has passed since last fetch
-      const now = Date.now();
-      if (lastFetchTimeRef.current && now - lastFetchTimeRef.current < POLL_INTERVAL) {
-        console.log('Dashboard: Skipping fetch - too soon');
-        return;
-      }
+      // Create new abort controller
+      abortControllerRef.current = new AbortController();
 
       console.log('Dashboard: Fetching entries');
       await getEntries({
         limit: MAX_ENTRIES,
         sort: 'date',
-        order: 'desc'
+        order: 'desc',
+        signal: abortControllerRef.current.signal
       });
-      lastFetchTimeRef.current = now;
+
+      lastFetchTimeRef.current = Date.now();
     } catch (error) {
+      if (error.name === 'AbortError') {
+        console.log('Dashboard: Request aborted');
+        return;
+      }
       console.error('Dashboard: Failed to fetch entries:', {
         message: error.message,
         status: error.response?.status
       });
+    } finally {
+      requestInFlightRef.current = false;
     }
   }, [isOnline, getEntries]);
 
   useEffect(() => {
-    // Initial fetch
-    fetchEntries();
+    let pollTimeout = null;
+    let visibilityTimeout = null;
 
-    // Set up polling
-    const pollInterval = setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        fetchEntries();
-      }
-    }, POLL_INTERVAL);
+    const schedulePoll = () => {
+      if (pollTimeout) clearTimeout(pollTimeout);
 
-    // Add visibility change listener
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        fetchEntries();
+      if (document.visibilityState === 'visible' && isOnline) {
+        pollTimeout = setTimeout(() => {
+          fetchEntries().then(() => schedulePoll());
+        }, POLL_INTERVAL);
       }
     };
+
+    // Initial fetch only if conditions are met
+    if (document.visibilityState === 'visible' && isOnline) {
+      fetchEntries();
+    }
+
+    schedulePoll();
+
+    // Visibility change handler with debounce
+    const handleVisibilityChange = () => {
+      if (visibilityTimeout) clearTimeout(visibilityTimeout);
+
+      visibilityTimeout = setTimeout(() => {
+        if (document.visibilityState === 'visible' && isOnline) {
+          fetchEntries().then(() => schedulePoll());
+        } else {
+          if (pollTimeout) clearTimeout(pollTimeout);
+        }
+      }, 300); // Debounce visibility changes
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Cleanup
     return () => {
-      clearInterval(pollInterval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (pollTimeout) clearTimeout(pollTimeout);
+      if (visibilityTimeout) clearTimeout(visibilityTimeout);
+      if (abortControllerRef.current) abortControllerRef.current.abort();
     };
-  }, []);
+  }, [fetchEntries, isOnline]);
 
   // Update recent entries with memoization
   const recentEntriesData = useMemo(() => {
