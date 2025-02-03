@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography, IconButton, Menu, MenuItem, TextField, Select, FormControl, InputLabel } from '@mui/material';
+import { Box, Grid, Stack, Typography, IconButton, Menu, MenuItem, TextField, Select, FormControl, InputLabel, Pagination } from '@mui/material';
 import { useAuth } from '../hooks/useAuth';
 import { useEntries } from '../hooks/useEntries';
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -7,6 +7,8 @@ import CardContainer from '../components/ui/CardContainer';
 import SectionHeader from '../components/ui/SectionHeader';
 import StatusChip from '../components/ui/StatusChip';
 import EntryDialog from '../components/entries/EntryDialog';
+
+const ENTRIES_PER_PAGE = 10;
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -18,12 +20,13 @@ const Dashboard = () => {
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const POLL_INTERVAL = 30000; // 30 seconds
-  const MAX_ENTRIES = 5;
+  const MAX_ENTRIES = 50; // Increased to handle pagination
 
   // Filtering state
   const [sortBy, setSortBy] = useState('date');
   const [filterMood, setFilterMood] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
 
   // Menu state
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -161,14 +164,20 @@ const Dashboard = () => {
     }) || [];
   }, [entries, filterMood, searchTerm, sortBy]);
 
-  // Update recent entries with memoization
-  const recentEntriesData = useMemo(() => {
-    return filteredEntries.slice(0, MAX_ENTRIES);
-  }, [filteredEntries]);
+  // Update recent entries with pagination
+  const paginatedEntries = useMemo(() => {
+    const startIndex = (page - 1) * ENTRIES_PER_PAGE;
+    return filteredEntries.slice(startIndex, startIndex + ENTRIES_PER_PAGE);
+  }, [filteredEntries, page]);
 
   useEffect(() => {
-    setRecentEntries(recentEntriesData);
-  }, [recentEntriesData]);
+    setRecentEntries(paginatedEntries);
+  }, [paginatedEntries]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [filterMood, searchTerm, sortBy]);
 
   // Handle menu actions
   const handleMenuOpen = (event, entryId) => {
@@ -202,6 +211,23 @@ const Dashboard = () => {
     if (success) {
       fetchEntries();
     }
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }).format(date);
   };
 
   return (
@@ -277,6 +303,8 @@ const Dashboard = () => {
                 <MenuItem value="angry">Angry</MenuItem>
                 <MenuItem value="anxious">Anxious</MenuItem>
                 <MenuItem value="neutral">Neutral</MenuItem>
+                <MenuItem value="excited">Excited</MenuItem>
+                <MenuItem value="peaceful">Peaceful</MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -317,7 +345,7 @@ const Dashboard = () => {
               title="Recent Entries"
               action={
                 <StatusChip
-                  label={`${entries?.length || 0} Total`}
+                  label={`${filteredEntries.length} Total`}
                   variant="outlined"
                   size="small"
                   type="tag"
@@ -326,90 +354,108 @@ const Dashboard = () => {
             />
             <Stack spacing={2}>
               {recentEntries.length > 0 ? (
-                recentEntries.map((entry) => (
-                  <Box
-                    key={entry.id}
-                    sx={{
-                      border: '1px solid #000',
-                      p: 2,
-                      bgcolor: '#fff',
-                      fontFamily: 'Courier New',
-                      position: 'relative'
-                    }}
-                  >
-                    <Box sx={{ 
-                      borderBottom: '1px solid #000',
-                      pb: 1,
-                      mb: 2,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}>
-                      <Box>
-                        <Typography sx={{ 
-                          fontFamily: 'Courier New',
-                          fontSize: '0.875rem',
-                          fontWeight: 'bold'
-                        }}>
-                          From: {user?.username}@soulsync.com
-                        </Typography>
-                        <Typography sx={{ 
-                          fontFamily: 'Courier New',
-                          fontSize: '0.875rem'
-                        }}>
-                          Date: {new Date(entry.date || entry.createdAt).toLocaleString()}
-                        </Typography>
-                        <Typography sx={{ 
-                          fontFamily: 'Courier New',
-                          fontSize: '0.875rem'
-                        }}>
-                          Subject: Mood - {entry.mood}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <IconButton
-                          onClick={(e) => handleMenuOpen(e, entry.id)}
-                          sx={{ fontFamily: 'Courier New' }}
-                        >
-                          ⚙️
-                        </IconButton>
-                      </Box>
-                    </Box>
-                    <Typography sx={{ 
-                      whiteSpace: 'pre-wrap',
-                      fontFamily: 'Courier New',
-                      fontSize: '0.875rem',
-                      mb: 2
-                    }}>
-                      {entry.content}
-                    </Typography>
-                    {entry.tags?.length > 0 && (
+                <>
+                  {recentEntries.map((entry) => (
+                    <Box
+                      key={entry.id}
+                      sx={{
+                        border: '1px solid #000',
+                        p: 2,
+                        bgcolor: '#fff',
+                        fontFamily: 'Courier New',
+                        position: 'relative'
+                      }}
+                    >
                       <Box sx={{ 
+                        borderBottom: '1px solid #000',
+                        pb: 1,
+                        mb: 2,
                         display: 'flex',
-                        gap: 1,
-                        flexWrap: 'wrap',
-                        borderTop: '1px solid #000',
-                        pt: 1
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
                       }}>
-                        {entry.tags.map((tag) => (
-                          <Typography
-                            key={tag}
-                            sx={{
-                              fontFamily: 'Courier New',
-                              fontSize: '0.75rem',
-                              bgcolor: '#f0f0f0',
-                              border: '1px solid #000',
-                              px: 1,
-                              borderRadius: 0
-                            }}
-                          >
-                            {tag}
+                        <Box>
+                          <Typography sx={{ 
+                            fontFamily: 'Courier New',
+                            fontSize: '0.875rem',
+                            fontWeight: 'bold'
+                          }}>
+                            From: {user?.username}@soulsync.com
                           </Typography>
-                        ))}
+                          <Typography sx={{ 
+                            fontFamily: 'Courier New',
+                            fontSize: '0.875rem'
+                          }}>
+                            Date: {formatDate(entry.date || entry.createdAt)}
+                          </Typography>
+                          <Typography sx={{ 
+                            fontFamily: 'Courier New',
+                            fontSize: '0.875rem'
+                          }}>
+                            Subject: {entry.title || `Mood - ${entry.mood}`}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <IconButton
+                            onClick={(e) => handleMenuOpen(e, entry.id)}
+                            sx={{ fontFamily: 'Courier New' }}
+                          >
+                            ⚙️
+                          </IconButton>
+                        </Box>
                       </Box>
-                    )}
+                      <Typography sx={{ 
+                        whiteSpace: 'pre-wrap',
+                        fontFamily: 'Courier New',
+                        fontSize: '0.875rem',
+                        mb: 2
+                      }}>
+                        {entry.content}
+                      </Typography>
+                      {entry.tags?.length > 0 && (
+                        <Box sx={{ 
+                          display: 'flex',
+                          gap: 1,
+                          flexWrap: 'wrap',
+                          borderTop: '1px solid #000',
+                          pt: 1
+                        }}>
+                          {entry.tags.map((tag) => (
+                            <Typography
+                              key={tag}
+                              sx={{
+                                fontFamily: 'Courier New',
+                                fontSize: '0.75rem',
+                                bgcolor: '#f0f0f0',
+                                border: '1px solid #000',
+                                px: 1,
+                                borderRadius: 0
+                              }}
+                            >
+                              {tag}
+                            </Typography>
+                          ))}
+                        </Box>
+                      )}
+                    </Box>
+                  ))}
+                  <Box sx={{ 
+                    display: 'flex', 
+                    justifyContent: 'center',
+                    mt: 2,
+                    '& .MuiPaginationItem-root': {
+                      fontFamily: 'Courier New'
+                    }
+                  }}>
+                    <Pagination
+                      count={Math.ceil(filteredEntries.length / ENTRIES_PER_PAGE)}
+                      page={page}
+                      onChange={handlePageChange}
+                      color="primary"
+                      size="large"
+                    />
                   </Box>
-                ))
+                </>
               ) : (
                 <Box
                   sx={{
