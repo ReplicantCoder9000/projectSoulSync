@@ -1,19 +1,20 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { useAuth } from '../hooks/useAuth';
 import { useEntries } from '../hooks/useEntries';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import MoodStats from '../components/stats/MoodStats';
 import CardContainer from '../components/ui/CardContainer';
 import SectionHeader from '../components/ui/SectionHeader';
 import StatusChip from '../components/ui/StatusChip';
+import { useRef } from 'react';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const { entries, getEntries, error: entriesError } = useEntries();
   const [recentEntries, setRecentEntries] = useState([]);
+  const lastFetchTimeRef = useRef(null);
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [lastFetchTime, setLastFetchTime] = useState(null);
   const POLL_INTERVAL = 30000; // 30 seconds
   const MAX_ENTRIES = 5;
 
@@ -32,36 +33,36 @@ const Dashboard = () => {
   }, []);
 
   // Fetch entries with smart polling
-  useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        if (!isOnline) {
-          console.log('Dashboard: Skipping fetch - offline');
-          return;
-        }
-
-        // Check if enough time has passed since last fetch
-        const now = Date.now();
-        if (lastFetchTime && now - lastFetchTime < POLL_INTERVAL) {
-          console.log('Dashboard: Skipping fetch - too soon');
-          return;
-        }
-
-        console.log('Dashboard: Fetching entries');
-        await getEntries({
-          limit: MAX_ENTRIES,
-          sort: 'date',
-          order: 'desc'
-        });
-        setLastFetchTime(now);
-      } catch (error) {
-        console.error('Dashboard: Failed to fetch entries:', {
-          message: error.message,
-          status: error.response?.status
-        });
+  const fetchEntries = useCallback(async () => {
+    try {
+      if (!isOnline) {
+        console.log('Dashboard: Skipping fetch - offline');
+        return;
       }
-    };
 
+      // Check if enough time has passed since last fetch
+      const now = Date.now();
+      if (lastFetchTimeRef.current && now - lastFetchTimeRef.current < POLL_INTERVAL) {
+        console.log('Dashboard: Skipping fetch - too soon');
+        return;
+      }
+
+      console.log('Dashboard: Fetching entries');
+      await getEntries({
+        limit: MAX_ENTRIES,
+        sort: 'date',
+        order: 'desc'
+      });
+      lastFetchTimeRef.current = now;
+    } catch (error) {
+      console.error('Dashboard: Failed to fetch entries:', {
+        message: error.message,
+        status: error.response?.status
+      });
+    }
+  }, [isOnline, getEntries]);
+
+  useEffect(() => {
     // Initial fetch
     fetchEntries();
 
@@ -85,7 +86,7 @@ const Dashboard = () => {
       clearInterval(pollInterval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [getEntries, isOnline, lastFetchTime]);
+  }, []);
 
   // Update recent entries with memoization
   const recentEntriesData = useMemo(() => {
@@ -247,7 +248,6 @@ const Dashboard = () => {
           </CardContainer>
         </Grid>
       </Grid>
-
     </Box>
   );
 };

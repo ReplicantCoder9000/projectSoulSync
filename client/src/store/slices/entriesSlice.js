@@ -19,7 +19,7 @@ export const getEntries = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const response = await entriesAPI.getEntries(params);
-      return response.data;
+      return response;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error || 'Failed to fetch entries');
     }
